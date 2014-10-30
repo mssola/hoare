@@ -2,6 +2,7 @@ project(hoare)
 
 # Find CMake and dependencies.
 cmake_minimum_required(VERSION 2.8.0)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/llvm/cmake")
 find_package(BISON REQUIRED)
 find_package(LLVM REQUIRED CONFIG)
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
