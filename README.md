@@ -1,5 +1,5 @@
 
-# About this [![Build Status](https://travis-ci.org/mssola/hoare.svg?branch=master)](https://travis-ci.org/mssola/hoare)
+# About this
 
 This project will try to implement the language described in the paper
 ["Communicating Sequential Processes"](http://spinroot.com/courses/summer/Papers/hoare_1978.pdf).
