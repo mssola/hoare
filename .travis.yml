@@ -2,5 +2,7 @@ language: cpp
 compiler:
   - gcc
   - clang
+before_install:
+  - sudo apt-get install -y llvm-3.4 llvm-3.4-dev
 script: mkdir -p build && cd build && cmake .. && make
 
