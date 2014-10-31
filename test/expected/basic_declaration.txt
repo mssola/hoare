@@ -1,0 +1,9 @@
+; ModuleID = 'main'
+
+declare i32 @printf(i8*, ...)
+
+define i32 @main() {
+entry:
+  %n = alloca i64
+  ret i32 0
+}

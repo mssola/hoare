@@ -44,6 +44,7 @@ static void yyerror(hoare::State *state, const char *s);
 %type<ident> name
 %type<num> num
 %type<stmt> stmt assignment_command printf_command simple_command command
+%type<stmt> declaration
 /*
 TODO
 %type<stmt> structured_command alternative_command repetitive_command
@@ -77,14 +78,14 @@ stmts : stmt ';'
 	}
 ;
 
-stmt: /*declaration |*/ command
+stmt: declaration | command
 ;
 
-/*
-TODO
-declaration:
+declaration: name ':' name
+	{
+		$<stmt>$ = new hoare::NDeclaration(*$1, *$3);
+	}
 ;
-*/
 
 command: simple_command
 	   /*

@@ -11,13 +11,12 @@
 
 namespace hoare {
 
-/*
- * TODO: maybe this class doesn't need header an all that.
- */
 class Problem
 {
 public:
 	explicit Problem(unsigned int l, unsigned int c, std::string m);
+
+	void print(const std::string &path);
 
 public:
 	unsigned int line, column;

@@ -7,14 +7,18 @@
 #ifndef HOARE_NODE_H
 #define HOARE_NODE_H
 
+#include <string>
 #include <vector>
-#include "problem.h"
 
 namespace llvm {
 	class Value;
 }
 
 namespace hoare {
+
+/*
+ * TODO: Be more clever with passed references.
+ */
 
 class Context;
 class NExpression;
@@ -56,7 +60,7 @@ public:
 	}
 
 public:
-	std::string &name;
+	std::string name;
 };
 
 class NString : public NExpression
@@ -85,6 +89,20 @@ public:
 
 public:
 	unsigned long long value;
+};
+
+class NDeclaration : public NStatement
+{
+public:
+	explicit NDeclaration(NName &left, NName &right)
+		: left(left), right(right)
+	{
+	}
+
+	virtual llvm::Value * generateValue(Context *context) override;
+
+public:
+	NName left, right;
 };
 
 class NAssign : public NStatement

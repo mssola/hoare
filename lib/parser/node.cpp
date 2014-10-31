@@ -6,6 +6,7 @@
 
 #include "node.h"
 #include <backend/context.h>
+#include <backend/types.h>
 #include <llvm/IR/Constants.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
@@ -43,6 +44,21 @@ llvm::Value * NNumeric::generateValue(Context *context)
 		llvm::Type::getInt64Ty(llvm::getGlobalContext()),
 		value, true
 	);
+}
+
+llvm::Value * NDeclaration::generateValue(Context *context)
+{
+	auto type = Types::of(right.name);
+	if (!type) {
+		std::cout << "Error: type `" << right.name << "` not found."
+			<< std::endl;
+		return nullptr;
+	}
+
+	auto alloc = new llvm::AllocaInst(type, left.name.c_str(),
+		context->getBlocks().current());
+	context->getBlocks().locals()[right.name] = alloc;
+	return alloc;
 }
 
 llvm::Value * NString::generateValue(Context *context)

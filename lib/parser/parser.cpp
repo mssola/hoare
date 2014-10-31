@@ -34,8 +34,7 @@ bool Parser::readFile(const std::string &path)
 	/* Open specified file */
 	FILE *fd = fopen(path.c_str(), "r");
 	if (!fd) {
-		std::cout << "error: cannot open file: " << path << std::endl;
-		fclose(fd);
+		m_state.problems.push_back(Problem(0, 0, "cannot open file"));
 		return false;
 	}
 
@@ -44,19 +43,20 @@ bool Parser::readFile(const std::string &path)
 	fseek(fd, 0, SEEK_SET);
 
 	if (!length) {
+		m_state.problems.push_back(Problem(0, 0, "cannot open file"));
 		fclose(fd);
 		return false;
 	}
 	m_state.contents = (char *) malloc(sizeof(char) * length);
 
 	if (!m_state.contents) {
-		std::cout << "error: cannot open file: " << path << std::endl;
-		fclose(fd);
+		m_state.problems.push_back(Problem(0, 0, "cannot open file"));
 		return false;
 	}
 	fread(m_state.contents, length, 1, fd);
 	if (ferror(fd)) {
-		std::cout << "error: cannot read file: " << path << std::endl;
+		Problem problem(0, 0, "cannot read file");
+		problem.print(path);
 		fclose(fd);
 		return false;
 	}
@@ -82,8 +82,7 @@ void Parser::parse(std::string path)
 
 	// Show all the problems that have occurred so far.
 	for (auto &p : m_state.problems) {
-		std::cout << path << ":" << p.line << ":" << p.column << ": "
-			<< p.message << std::endl;
+		p.print(path);
 	}
 }
 

@@ -5,9 +5,11 @@ add_library(backend STATIC
   builtins.cpp
   blocks.cpp
   printer.cpp
+  types.cpp
 )
 
 target_link_libraries(backend
   parser
+  utils
 )
 

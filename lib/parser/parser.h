@@ -7,6 +7,7 @@
 #ifndef HOARE_PARSER_H
 #define HOARE_PARSER_H
 
+#include <utils/problem.h>
 #include <string>
 #include "node.h"
 
