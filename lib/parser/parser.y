@@ -43,7 +43,15 @@ static void yyerror(hoare::State *state, const char *s);
 %type<string> string
 %type<ident> name
 %type<num> num
-%type<stmt> stmt assignment_command printf_command
+%type<stmt> stmt assignment_command printf_command simple_command command
+/*
+TODO
+%type<stmt> structured_command alternative_command repetitive_command
+*/
+/*
+TODO
+%type<stmt> parallel_command
+*/
 %type<code> stmts
 %type<exprlist> args
 
@@ -57,44 +65,62 @@ program: stmts { state->code = $1; }
 stmts : stmt ';'
 	{
 		$$ = new hoare::NCode();
-		$$->statements.push_back($<stmt>1);
+		if ($1) {
+			$$->statements.push_back($<stmt>1);
+		}
 	}
 	| stmts stmt ';'
 	{
-		$1->statements.push_back($<stmt>2);
+		if ($2) {
+			$1->statements.push_back($<stmt>2);
+		}
 	}
 ;
 
-stmt: printf_command
-	| assignment_command
+stmt: /*declaration |*/ command
+;
 
 /*
-
-command_list: command command_list
-			{
-	}
+TODO
+declaration:
 ;
+*/
 
 command: simple_command
-	   {
-	}
+	   /*
+	| structured_command
+	   */
 ;
 
-simple_command: null_command | assignment_command
-			  {
+simple_command: /* skip */
+	{
+		$$ = nullptr;
 	}
+	| printf_command
+	| assignment_command
+	/*
+	| input_command
+	| output_command
+	*/
 ;
-
-null_command: { $$ = nullptr; }
-			;
-
-*/
 
 assignment_command: name tASSIGN num
 	{
 		$<stmt>$ = new hoare::NAssign(*$1, *$3);
 	}
 ;
+
+/* TODO */
+/*
+input_command:
+;
+*/
+
+/* TODO */
+/*
+output_command:
+;
+*/
 
 printf_command: tPRINTF '(' args ')'
 	{
@@ -109,6 +135,30 @@ args: args ',' expr { $1->push_back($<expr>3); }
 		$$->push_back($<expr>1);
 	}
 ;
+
+/*
+TODO
+structured_command: alternative_command | repetitive_command | parallel_command
+;
+*/
+
+/* TODO */
+/*
+alternative_command:
+;
+*/
+
+/* TODO */
+/*
+repetitive_command:
+;
+*/
+
+/* TODO */
+/*
+parallel_command:
+;
+*/
 
 expr: name | num | string
 ;
