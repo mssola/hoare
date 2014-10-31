@@ -1,0 +1,66 @@
+#!/usr/bin/perl -w
+# Copyright (C) 2014 Miquel Sabaté Solà <mikisabate@gmail.com>
+# This file is licensed under the MIT license.
+# See the LICENSE file.
+
+use strict;
+use File::Basename;
+use Cwd 'abs_path', 'getcwd';
+
+
+##
+# Config values.
+
+# The base path that this script will use. By default it picks the root of the
+# project.
+my $base = abs_path(getcwd . '/..');
+
+# The build directory relative to the $base path.
+my $build = 'build';
+
+# The name of the executable file.
+my $exe = 'hoare';
+
+
+# First of all, compile the executable file.
+print "Compiling the `hoare` executable file again.\n";
+chdir "$base/$build";
+if (-f $exe) {
+    `rm $exe`;
+}
+`cmake .. && make`;
+if (-f "$base/$build/$exe") {
+    print "Build was successful.\n";
+} else {
+    print "Could not compile the `hoare` executable file.\n";
+    exit 1;
+}
+
+# Auxiliar thingies.
+my $files = "$base/test/files";
+my $expected = "$base/test/expected";
+my @oks = ();
+my @fails = ();
+
+# And finally execute the tests.
+opendir(DIR, "$base/test/files") or die $!;
+while (my $file = readdir(DIR)) {
+    next if ($file =~ m/^\./);
+    my $name = $file;
+    $name =~ s/\.hoare//;
+
+    `./$exe -f $files/$file > $expected/$file`;
+    my $out = `diff $expected/$name.txt $expected/$file`;
+    if ($out eq '') {
+        print "$name: OK\n";
+        push(@oks, $name);
+    } else {
+        print "$name: FAIL!\n";
+        print "$out";
+        push(@fails, $name);
+    }
+}
+closedir(DIR);
+
+print "Oks: " . @oks . " Fails: " . @fails . "\n";
+

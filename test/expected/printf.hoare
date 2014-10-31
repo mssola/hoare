@@ -1,0 +1,12 @@
+; ModuleID = 'main'
+
+@.str = private constant [9 x i8] c"%d - %s\0A\00"
+@.str1 = private constant [4 x i8] c"asd\00"
+
+declare i32 @printf(i8*, ...)
+
+define i32 @main() {
+entry:
+  %0 = call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([9 x i8]* @.str, i32 0, i32 0), i64 1, i8* getelementptr inbounds ([4 x i8]* @.str1, i32 0, i32 0))
+  ret i32 0
+}
