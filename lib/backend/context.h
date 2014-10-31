@@ -9,14 +9,16 @@
 
 #include "blocks.h"
 #include <parser/node.h>
+#include <utils/problem.h>
 #include <llvm/IR/Function.h>
+#include <vector>
 
 namespace hoare {
 
 class Context
 {
 public:
-	Context();
+	explicit Context(const std::string &path);
 
 	void generateCode(NCode *code);
 	void run();
@@ -32,7 +34,11 @@ public:
 		return blocks;
 	}
 
+public:
+	std::vector<Problem> problems;
+
 private:
+	std::string path;
 	llvm::Module *module;
 	llvm::Function *main;
 	Blocks blocks;

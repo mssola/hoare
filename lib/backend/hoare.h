@@ -17,7 +17,7 @@ public:
 	Hoare();
 	explicit Hoare(const char *path);
 
-	int compile(bool print = false) const;
+	int compile(bool print = false);
 
 private:
 	std::string path;

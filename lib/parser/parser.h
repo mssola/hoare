@@ -32,7 +32,7 @@ public:
 	Parser();
 	~Parser();
 
-	void parse(std::string path);
+	void parse(const std::string &path);
 
 	inline NCode * code() const
 	{

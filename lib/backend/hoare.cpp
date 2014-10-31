@@ -22,7 +22,7 @@ Hoare::Hoare(const char *path)
 {
 }
 
-int Hoare::compile(bool print) const
+int Hoare::compile(bool print)
 {
 	Parser parser;
 	parser.parse(path);
@@ -34,7 +34,7 @@ int Hoare::compile(bool print) const
 
 	llvm::InitializeNativeTarget();
 
-	Context context;
+	Context context(path);
 	context.generateCode(code);
 	if (print) {
 		Printer printer;

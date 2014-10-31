@@ -66,7 +66,7 @@ bool Parser::readFile(const std::string &path)
 	return true;
 }
 
-void Parser::parse(std::string path)
+void Parser::parse(const std::string &path)
 {
 	// Reset the previous state if we are coming from a previous execution.
 	m_state.problems.clear();

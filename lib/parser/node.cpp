@@ -50,8 +50,8 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 {
 	auto type = Types::of(right.name);
 	if (!type) {
-		std::cout << "Error: type `" << right.name << "` not found."
-			<< std::endl;
+		auto msg = "type `" + right.name + "` not found";
+		context->problems.push_back(Problem(0, 0, msg));
 		return nullptr;
 	}
 
@@ -93,7 +93,8 @@ llvm::Value * NFunctionCall::generateValue(Context *context)
 	// Get the printn function.
 	auto function = context->getModule()->getFunction("printf");
 	if (!function) {
-		std::cout << "Error: function `printf` not found." << std::endl;
+		auto msg = "function `printf` not found";
+		context->problems.push_back(Problem(0, 0, msg));
 		return nullptr;
 	}
 
