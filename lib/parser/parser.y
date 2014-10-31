@@ -28,6 +28,7 @@ static void yyerror(hoare::State *state, const char *s);
 	hoare::NName *ident;
 	hoare::NNumeric *num;
 	hoare::NExpressionList *exprlist;
+	hoare::NStatementList *stmtlist;
 	unsigned long long numeric;
 	int token;
 }
@@ -39,23 +40,20 @@ static void yyerror(hoare::State *state, const char *s);
 
 %token<name> tNAME tSTRING
 %token<numeric> tNUM
-%token<token> tASSIGN tPRINTF
+%token<token> tASSIGN tPRINTF tDOT2 tCOLON2 tOR tELLIPSIS
 
 %type<string> string
 %type<ident> name
 %type<num> num
 %type<stmt> stmt assignment_command printf_command simple_command command
-%type<stmt> declaration
+%type<stmt> declaration process structured_command parallel_command
 /*
 TODO
 %type<stmt> structured_command alternative_command repetitive_command
 */
-/*
-TODO
-%type<stmt> parallel_command
-*/
 %type<code> stmts
 %type<exprlist> args
+%type<stmtlist> process_list
 
 %start program
 
@@ -84,14 +82,12 @@ stmt: declaration | command
 
 declaration: name ':' name
 	{
+		$1->declaration = true;
 		$<stmt>$ = new hoare::NDeclaration(*$1, *$3);
 	}
 ;
 
-command: simple_command
-	   /*
-	| structured_command
-	   */
+command: simple_command | structured_command
 ;
 
 simple_command: /* skip */
@@ -138,11 +134,9 @@ args: args ',' expr { $1->push_back($<expr>3); }
 	}
 ;
 
-/*
-TODO
-structured_command: alternative_command | repetitive_command | parallel_command
+/* TODO */
+structured_command: /*alternative_command | repetitive_command |*/ parallel_command
 ;
-*/
 
 /* TODO */
 /*
@@ -156,12 +150,67 @@ repetitive_command:
 ;
 */
 
-/* TODO */
-/*
-parallel_command:
+parallel_command: '[' process_list ']'
+	{
+		auto /* p = */ np = new hoare::NParallel();
+		np->statements = *$2;
+		$$ = np;
+	}
 ;
-*/
 
+process_list: process
+	{
+		$$ = new hoare::NStatementList();
+		if ($1) {
+			$$->push_back($<stmt>1);
+		}
+	}
+	| process_list tOR process
+	{
+		if ($3) {
+			$1->push_back($<stmt>3);
+		}
+	}
+;
+
+/* TODO */
+process: process_label stmts
+	{
+		$$ = nullptr;
+	}
+	| tELLIPSIS
+	{
+		$$ = nullptr;
+	}
+;
+
+/* TODO */
+process_label: name tCOLON2
+	{
+	}
+	| name '(' label_subscript_list ')' tCOLON2
+	{
+	}
+;
+
+/* TODO */
+label_subscript_list: label_subscript
+	| label_subscript_list ',' label_subscript
+;
+
+/* TODO */
+label_subscript: integer_constant | range
+;
+
+/* TODO */
+integer_constant: num | name
+;
+
+/* TODO */
+range: name ':' num tDOT2 num
+;
+
+/* TODO */
 expr: name | num | string
 ;
 
@@ -318,6 +367,25 @@ retry:
 		if (*(state->lexer) == '=') {
 			nextc();
 			return tASSIGN;
+		} else if (*(state->lexer) == ':') {
+			nextc();
+			return tCOLON2;
+		}
+		break;
+	case '.':
+		if (*(state->lexer) == '.') {
+			nextc();
+			if (*(state->lexer) == '.') {
+				nextc();
+				return tELLIPSIS;
+			}
+			return tDOT2;
+		}
+		break;
+	case '|':
+		if (*(state->lexer) == '|') {
+			nextc();
+			return tOR;
 		}
 		break;
 	case '"':

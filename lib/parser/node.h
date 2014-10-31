@@ -22,8 +22,10 @@ namespace hoare {
 
 class Context;
 class NExpression;
+class NStatement;
 
 typedef std::vector<NExpression *> NExpressionList;
+typedef std::vector<NStatement *> NStatementList;
 
 class Node
 {
@@ -42,6 +44,9 @@ class NStatement : public Node
 {
 };
 
+/*
+ * TODO Rename to Block or something like that
+ */
 class NCode : public Node
 {
 public:
@@ -50,6 +55,14 @@ public:
 public:
 	std::vector<NStatement*> statements;
 };
+
+class NParallel : public NStatement
+{
+public:
+	std::vector<NStatement *> statements;
+};
+
+//class NProcess : public Node
 
 class NName : public NExpression
 {
@@ -60,12 +73,14 @@ public:
 		line = -1;
 		startColumn = 0;
 		endColumn = 0;
+		declaration = false;
 	}
 
 public:
 	std::string name;
 	int line;
 	int startColumn, endColumn;
+	bool declaration;
 };
 
 class NString : public NExpression
