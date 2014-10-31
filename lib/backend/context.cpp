@@ -48,10 +48,10 @@ void Context::generateCode(NCode *code)
 
 	/* Push a new variable/block context */
 	blocks.push(bblock);
-	code->generateValue(this); /* emit bytecode for the toplevel block */
+	code->generateValue(this);
 	if (!problems.empty()) {
 		for (auto &p : problems) {
-			p.print("lala");
+			p.print(path);
 		}
 	}
 

@@ -51,7 +51,8 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 	auto type = Types::of(right.name);
 	if (!type) {
 		auto msg = "type `" + right.name + "` not found";
-		context->problems.push_back(Problem(0, 0, msg));
+		Problem p(right.line, right.startColumn, right.endColumn, msg);
+		context->problems.push_back(p);
 		return nullptr;
 	}
 

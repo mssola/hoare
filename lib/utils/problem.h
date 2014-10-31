@@ -15,11 +15,18 @@ class Problem
 {
 public:
 	explicit Problem(unsigned int l, unsigned int c, std::string m);
+	explicit Problem(unsigned int line, unsigned int startColumn,
+		unsigned int endColumn, std::string m);
 
 	void print(const std::string &path);
 
+private:
+	void printReport(const std::string &path);
+	void printLine(const std::string &path);
+	std::string absolutePath(const std::string &path) const;
+
 public:
-	unsigned int line, column;
+	unsigned int line, startColumn, endColumn;
 	std::string message;
 };
 

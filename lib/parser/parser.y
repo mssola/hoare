@@ -8,6 +8,7 @@
 
 // TODO
 #include <iostream>
+#include <cstring>
 #include <parser/node.h>
 #include <parser/parser.h>
 
@@ -164,7 +165,14 @@ parallel_command:
 expr: name | num | string
 ;
 
-name: tNAME { $$ = new hoare::NName(*$1); delete $1; }
+name: tNAME
+	{
+		$$ = new hoare::NName(*$1);
+		$$->line = state->line;
+		$$->startColumn = (state->column - strlen($$->name.c_str()));
+		$$->endColumn = state->column - 1;
+		delete $1;
+	}
 ;
 
 num: tNUM { $$ = new hoare::NNumeric($1); }

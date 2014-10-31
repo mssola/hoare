@@ -4,15 +4,15 @@
  * See the LICENSE file.
  */
 
-#include <iostream>
-#include <cstdlib>
 #include <backend/hoare.h>
+#include <llvm/Support/raw_ostream.h>
+#include <cstdlib>
 
 using namespace hoare;
 
 void usage()
 {
-	std::cout << "usage: hoare [-S] <file>" << std::endl;
+	llvm::outs() << "usage: hoare [-S] <file>\n";
 }
 
 int main(int argc, char *argv[])

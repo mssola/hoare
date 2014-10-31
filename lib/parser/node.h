@@ -57,10 +57,15 @@ public:
 	NName(std::string &name)
 		: name(name)
 	{
+		line = -1;
+		startColumn = 0;
+		endColumn = 0;
 	}
 
 public:
 	std::string name;
+	int line;
+	int startColumn, endColumn;
 };
 
 class NString : public NExpression
