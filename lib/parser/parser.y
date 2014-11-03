@@ -58,7 +58,10 @@ static void yyerror(hoare::State *state, const char *s);
 
 %%
 
-program: stmts { state->code = $1; }
+program: stmts
+	{
+		state->code = $1;
+	}
 ;
 
 stmts: stmt ';'
@@ -182,7 +185,10 @@ printf_command: tPRINTF '(' args ')'
 	}
 ;
 
-args: args ',' expr { $1->push_back($<expr>3); }
+args: args ',' expr
+	{
+		$1->push_back($<expr>3);
+	}
 	| expr
 	{
 		$$ = new hoare::NExpressionList();
@@ -327,10 +333,17 @@ name: tNAME
 	}
 ;
 
-num: tNUM { $$ = new hoare::NNumeric($1); }
+num: tNUM
+	{
+		$$ = new hoare::NNumeric($1);
+	}
 ;
 
-string: tSTRING { $$ = new hoare::NString(*$<name>1); delete $1; }
+string: tSTRING
+	{
+		$$ = new hoare::NString(*$<name>1);
+		delete $1;
+	}
 ;
 
 %%
