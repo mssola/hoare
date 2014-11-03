@@ -40,17 +40,16 @@ static void yyerror(hoare::State *state, const char *s);
 
 %token<name> tNAME tSTRING
 %token<numeric> tNUM
-%token<token> tASSIGN tPRINTF tDOT2 tCOLON2 tOR tELLIPSIS
+%token<token> tASSIGN tPRINTF tDOT2 tCOLON2 tOR tELLIPSIS tARROW tSQUARE
+%token<token> tEQ tLEQ tLT tGEQ tGT tNE
 
 %type<string> string
 %type<ident> name
 %type<num> num
 %type<stmt> stmt assignment_command printf_command simple_command command
 %type<stmt> declaration process structured_command parallel_command
-/*
-TODO
-%type<stmt> structured_command alternative_command repetitive_command
-*/
+%type<stmt> input_command output_command
+%type<stmt> alternative_command repetitive_command
 %type<code> stmts
 %type<exprlist> args
 %type<stmtlist> process_list
@@ -60,9 +59,9 @@ TODO
 %%
 
 program: stmts { state->code = $1; }
-	   ;
+;
 
-stmts : stmt ';'
+stmts: stmt ';'
 	{
 		$$ = new hoare::NCode();
 		if ($1) {
@@ -77,7 +76,8 @@ stmts : stmt ';'
 	}
 ;
 
-stmt: declaration | command
+stmt: declaration
+	| command
 ;
 
 declaration: name ':' name
@@ -87,38 +87,94 @@ declaration: name ':' name
 	}
 ;
 
-command: simple_command | structured_command
+command: simple_command
+	| structured_command
 ;
 
-simple_command: /* skip */
+simple_command: %empty
 	{
 		$$ = nullptr;
 	}
 	| printf_command
 	| assignment_command
-	/*
 	| input_command
 	| output_command
-	*/
 ;
 
-assignment_command: name tASSIGN num
+/* TODO */
+assignment_command: target_variable tASSIGN expression
 	{
-		$<stmt>$ = new hoare::NAssign(*$1, *$3);
 	}
 ;
 
 /* TODO */
-/*
-input_command:
+expression: integer_constant
+	| structured_expression
 ;
-*/
 
 /* TODO */
-/*
-output_command:
+structured_expression: num '(' opt_expression_list ')'
 ;
-*/
+
+/* TODO */
+constructor: %empty
+	| name
+;
+
+/* TODO */
+opt_expression_list: %empty
+	| expression_list
+;
+
+/* TODO */
+expression_list: expression
+	| expression_list ',' expression
+;
+
+/* TODO */
+target_variable: name
+	| structured_target
+;
+
+/* TODO */
+structured_target: constructor '(' opt_target_variable_list ')'
+;
+
+/* TODO */
+opt_target_variable_list: %empty
+	| target_variable_list
+;
+
+/* TODO */
+target_variable_list: target_variable
+	| target_variable_list ',' target_variable
+;
+
+/* TODO */
+input_command: process_name '<' target_variable
+	{
+	}
+;
+
+/* TODO */
+output_command: process_name '>' expression
+	{
+	}
+;
+
+/* TODO */
+process_name: '-' name opt_subscripts_list
+;
+
+/* TODO */
+opt_subscripts_list: %empty
+	| '(' subscripts_list ')'
+;
+
+/* TODO */
+subscripts_list: num
+	| subscripts_list ',' num
+;
 
 printf_command: tPRINTF '(' args ')'
 	{
@@ -135,21 +191,63 @@ args: args ',' expr { $1->push_back($<expr>3); }
 ;
 
 /* TODO */
-structured_command: /*alternative_command | repetitive_command |*/ parallel_command
+structured_command: alternative_command
+	| repetitive_command
+	| parallel_command
 ;
 
 /* TODO */
-/*
-alternative_command:
+alternative_command: '[' guarded_command_list ']'
+	{
+	}
 ;
-*/
 
 /* TODO */
-/*
-repetitive_command:
+guarded_command_list: guarded_command
+	| guarded_command_list tSQUARE guarded_command
 ;
-*/
 
+/* TODO */
+guarded_command: guard tARROW stmts
+	| '(' range_list ')' guard tARROW stmts
+;
+
+/* TODO */
+range_list: range
+	| range_list ',' range
+;
+
+/* TODO */
+guard: guard_list
+	| guard_list ';' input_command
+	| input_command
+;
+
+/* TODO */
+guard_list: guard_element
+	| guard_list ';' guard_element
+;
+
+/* TODO */
+guard_element: boolean_expression
+	| declaration
+;
+
+/* TODO */
+boolean_expression: integer_constant cmp integer_constant
+;
+
+/* TODO */
+cmp: tEQ | tLEQ | tLT | tGEQ | tGT | tNE
+;
+
+/* TODO */
+repetitive_command: '*' alternative_command
+	{
+	}
+;
+
+/* TODO */
 parallel_command: '[' process_list ']'
 	{
 		auto /* p = */ np = new hoare::NParallel();
@@ -158,6 +256,7 @@ parallel_command: '[' process_list ']'
 	}
 ;
 
+/* TODO */
 process_list: process
 	{
 		$$ = new hoare::NStatementList();
@@ -199,11 +298,13 @@ label_subscript_list: label_subscript
 ;
 
 /* TODO */
-label_subscript: integer_constant | range
+label_subscript: integer_constant
+	| range
 ;
 
 /* TODO */
-integer_constant: num | name
+integer_constant: num
+	| name
 ;
 
 /* TODO */
@@ -211,7 +312,9 @@ range: name ':' num tDOT2 num
 ;
 
 /* TODO */
-expr: name | num | string
+expr: name
+	| num
+	| string
 ;
 
 name: tNAME
@@ -301,7 +404,7 @@ static void parserPushBack(hoare::State *state)
 }
 #define pushback() parserPushBack(state)
 
-char readEscape(hoare::State *state)
+static char readEscape(hoare::State *state)
 {
 	int c;
 
@@ -351,7 +454,7 @@ static int yylex(void *lval, void *p)
 	std::string name = "";
 
 retry:
-	 prev = state->lexer;
+	prev = state->lexer;
 	c = nextc();
 
 	switch (c) {
@@ -386,6 +489,42 @@ retry:
 		if (*(state->lexer) == '|') {
 			nextc();
 			return tOR;
+		}
+		break;
+	case '[':
+		if (*(state->lexer) == ']') {
+			nextc();
+			return tSQUARE;
+		}
+		break;
+	case '-':
+		if (*(state->lexer) == '>') {
+			nextc();
+			return tARROW;
+		}
+		break;
+	case '=':
+		if (*(state->lexer) == '=') {
+			nextc();
+			return tEQ;
+		}
+		break;
+	case '<':
+		if (*(state->lexer) == '=') {
+			nextc();
+			return tLEQ;
+		}
+		return tLT;
+	case '>':
+		if (*(state->lexer) == '=') {
+			nextc();
+			return tGEQ;
+		}
+		return tGT;
+	case '!':
+		if (*(state->lexer) == '=') {
+			nextc();
+			return tNE;
 		}
 		break;
 	case '"':
