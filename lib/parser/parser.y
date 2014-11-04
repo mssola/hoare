@@ -120,6 +120,11 @@ stmts: stmt ';'
 			$1->statements.push_back($<stmt>2);
 		}
 	}
+	| error ';'
+	{
+		yyerrok;
+		$$ = nullptr;
+	}
 ;
 
 stmt: declaration
