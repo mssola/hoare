@@ -16,8 +16,8 @@
 
 using namespace hoare;
 
-Context::Context(const std::string &path)
-	: path(path), problems(Problems(path))
+Context::Context(const std::string &path, const Problems &problems)
+	: path(path), problems(problems)
 {
 	module = new llvm::Module("main", llvm::getGlobalContext());
 }

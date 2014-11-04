@@ -36,11 +36,9 @@ void Driver::parse(const std::string &path)
 	// Parse the thing.
 	scanner = Scanner(path);
 	if (scanner.readFile()) {
+		code = new NCode();
 		yyparse(this);
 	}
-
-	// Show all the problems that have occurred so far.
-	problems.print();
 }
 
 void Driver::addProblem(const std::string &message)

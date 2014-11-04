@@ -37,6 +37,7 @@ class Problems
 public:
 	Problems();
 	explicit Problems(const std::string &path);
+	explicit Problems(const Problems &problems);
 	virtual ~Problems();
 
 	void addProblem(unsigned int line, unsigned int column,

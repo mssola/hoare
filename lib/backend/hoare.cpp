@@ -28,6 +28,7 @@ int Hoare::compile(bool print)
 	Driver parser;
 	parser.parse(path);
 	if (!parser.code) {
+		parser.problems.print();
 		return 1;
 	}
 
@@ -35,7 +36,7 @@ int Hoare::compile(bool print)
 	llvm::InitializeNativeTarget();
 
 	// Generate the code.
-	Context context(path);
+	Context context(path, parser.problems);
 	context.generateCode(parser.code);
 	if (!context.problems.empty()) {
 		return 1;

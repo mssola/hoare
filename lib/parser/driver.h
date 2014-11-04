@@ -31,8 +31,6 @@ private:
 public:
 	NCode *code;
 	Scanner scanner;
-
-private:
 	Problems problems;
 };
 

@@ -86,7 +86,8 @@ llvm::Value * NName::generateValue(Context *context)
 	auto locals = context->getBlocks().locals();
 
 	if (locals.find(name) == locals.end()) {
-		auto msg = "variable `" + name + "` not declared in this scope";
+		auto msg = "variable `" + name + "` has not been declared in" +
+			" this scope";
 		context->problems.addProblem(line, startColumn, endColumn, msg);
 		return nullptr;
 	}

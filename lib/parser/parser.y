@@ -102,28 +102,27 @@ static int yylex(YYSTYPE *lval, void *p)
 %%
 
 program: stmts
-	{
-		driver->code = $1;
-	}
 ;
 
 stmts: stmt ';'
 	{
-		$$ = new hoare::NCode();
 		if ($1) {
-			$$->statements.push_back($<stmt>1);
+			driver->code->statements.push_back($<stmt>1);
 		}
 	}
 	| stmts stmt ';'
 	{
 		if ($2) {
-			$1->statements.push_back($<stmt>2);
+			driver->code->statements.push_back($<stmt>2);
 		}
 	}
 	| error ';'
 	{
 		yyerrok;
-		$$ = nullptr;
+	}
+	| stmts error ';'
+	{
+		yyerrok;
 	}
 ;
 

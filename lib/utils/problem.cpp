@@ -110,6 +110,11 @@ Problems::Problems(const std::string &path)
 	problems.clear();
 }
 
+Problems::Problems(const Problems &problems)
+	: path(problems.path), problems(problems.problems)
+{
+}
+
 Problems::~Problems()
 {
 	problems.clear();
@@ -145,7 +150,7 @@ void Problems::print()
 	}
 
 	std::string str = std::to_string(problems.size()) + " error";
-	if (problems.size() >= 1) {
+	if (problems.size() > 1) {
 		str += "s";
 	}
 	str += " generated.\n";

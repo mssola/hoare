@@ -18,7 +18,7 @@ namespace hoare {
 class Context
 {
 public:
-	explicit Context(const std::string &path);
+	explicit Context(const std::string &path, const Problems &problems);
 
 	void generateCode(NCode *code);
 	void run();
