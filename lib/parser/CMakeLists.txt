@@ -1,11 +1,11 @@
 
-bison_target(PARSER parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser_gen.cpp)
+bison_target(PARSER parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp)
 
 add_library(parser STATIC
   ${BISON_PARSER_OUTPUTS}
-  parser.cpp
   node.cpp
-  lexer.cpp
+  driver.cpp
+  scanner.cpp
 )
 
 target_link_libraries(parser

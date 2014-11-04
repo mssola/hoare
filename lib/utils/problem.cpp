@@ -12,6 +12,11 @@
 
 using namespace hoare;
 
+Problem::Problem()
+	: Problem(0, 0, 0, "")
+{
+}
+
 Problem::Problem(unsigned int l, unsigned int c, std::string m)
 	: Problem(l, c, c, m)
 {

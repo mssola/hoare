@@ -14,6 +14,7 @@ namespace hoare {
 class Problem
 {
 public:
+	Problem();
 	explicit Problem(unsigned int l, unsigned int c, std::string m);
 	explicit Problem(unsigned int line, unsigned int startColumn,
 		unsigned int endColumn, std::string m);

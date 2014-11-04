@@ -10,40 +10,31 @@
 #include <utils/problem.h>
 #include <string>
 #include "node.h"
+#include "scanner.h"
 
 namespace hoare {
 
 class NCode;
 
-// TODO
-typedef struct {
-	NCode *code;
-	std::vector<Problem> problems;
-
-	unsigned int line, column, prevc;
-	char *contents;
-	unsigned int length;
-	char *lexer;
-} State;
-
-class Parser
+// TODO: rename to driver.
+class Driver
 {
 public:
-	Parser();
-	~Parser();
+	Driver();
+	~Driver();
 
 	void parse(const std::string &path);
-
-	inline NCode * code() const
-	{
-		return m_state.code;
-	}
+	void addProblem(const std::string &message);
 
 private:
-	bool readFile(const std::string &path);
+	char readEscape(Driver *driver);
+
+public:
+	NCode *code;
+	Scanner scanner;
 
 private:
-	State m_state;
+	std::vector<Problem> problems;
 };
 
 }

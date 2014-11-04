@@ -7,7 +7,7 @@
 #include "hoare.h"
 #include "context.h"
 #include "printer.h"
-#include <parser/parser.h>
+#include <parser/driver.h>
 #include <llvm/Support/TargetSelect.h>
 #include <llvm/ExecutionEngine/JIT.h>
 
@@ -24,18 +24,16 @@ Hoare::Hoare(const char *path)
 
 int Hoare::compile(bool print)
 {
-	Parser parser;
+	Driver parser;
 	parser.parse(path);
-
-	auto code = parser.code();
-	if (!code) {
+	if (!parser.code) {
 		return 1;
 	}
 
 	llvm::InitializeNativeTarget();
 
 	Context context(path);
-	context.generateCode(code);
+	context.generateCode(parser.code);
 	if (print) {
 		Printer printer;
 		printer.print(context);

@@ -10,8 +10,20 @@
 #include <iostream>
 #include <cstring>
 #include <parser/node.h>
-#include <parser/parser.h>
-#include <parser/lexer.h>
+#include <parser/driver.h>
+#include <parser/scanner.h>
+
+#ifdef yyerror
+#undef yyerror
+#endif
+#define yyerror(driver,msg) driver->addProblem(msg)
+
+
+static int yylex(YYSTYPE *lval, void *p)
+{
+	hoare::Driver *driver = static_cast<hoare::Driver *>(p);
+	return driver->scanner.lex(lval, driver);
+}
 
 %}
 
@@ -31,14 +43,38 @@
 }
 
 %define parse.error verbose
-%pure-parser
-%lex-param { hoare::State *state }
-%parse-param { hoare::State *state }
+%define api.pure
 
-%token<name> tNAME tSTRING
-%token<numeric> tNUM
-%token<token> tASSIGN tPRINTF tDOT2 tCOLON2 tOR tELLIPSIS tARROW tSQUARE
-%token<token> tEQ tLEQ tLT tGEQ tGT tNE
+%lex-param { hoare::Driver *driver }
+%parse-param { hoare::Driver *driver }
+
+// Tokens.
+
+%token <name>
+	tNAME		"name"
+	tSTRING		"string"
+
+%token <numeric>
+	tNUM		"number"
+
+%token <token>
+	tASSIGN		"assignment"
+	tPRINTF		"printf"
+	tDOT2		"range"
+	tCOLON2		"double colon"
+	tOR			"separator"
+	tELLIPSIS	"empty value"
+	tARROW		"guard arrow"
+	tSQUARE		"guard separator"
+	tEQ			"equal comparison"
+	tLEQ		"less or equal comparison"
+	tLT			"less than comparison"
+	tGEQ		"greater or equal comparison"
+	tGT			"greater than comparison"
+	tNE			"not equal comparison"
+	tEND 0		"end of file"
+
+// Rules.
 
 %type<string> string
 %type<ident> name
@@ -51,11 +87,15 @@
 %type<exprlist> args
 %type<stmtlist> process_list
 
-%left LEQ LNE LLE LGE LLT LGT
+// Operator precedence.
+
+%left tEQ tLNE tLEQ tLGEQ tLT tGT
 %left '+' '-'
 %left '*' '/' '%'
 %left '('
 %left ')'
+
+// TODO: destructor
 
 %start program
 
@@ -63,7 +103,7 @@
 
 program: stmts
 	{
-		state->code = $1;
+		driver->code = $1;
 	}
 ;
 
@@ -339,9 +379,9 @@ expr: name
 name: tNAME
 	{
 		$$ = new hoare::NName(*$1);
-		$$->line = state->line;
-		$$->startColumn = (state->column - strlen($$->name.c_str()));
-		$$->endColumn = state->column - 1;
+		$$->line = driver->scanner.line;
+		$$->startColumn = (driver->scanner.column - strlen($$->name.c_str()));
+		$$->endColumn = driver->scanner.column - 1;
 		delete $1;
 	}
 ;
