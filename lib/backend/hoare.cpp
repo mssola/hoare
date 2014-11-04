@@ -25,7 +25,7 @@ Hoare::Hoare(const char *path)
 int Hoare::compile(bool print)
 {
 	// First of all we have to parse the given file.
-	Drive parser;
+	Driver parser;
 	parser.parse(path);
 	if (!parser.code) {
 		return 1;
