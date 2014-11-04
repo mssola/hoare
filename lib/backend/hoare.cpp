@@ -24,16 +24,24 @@ Hoare::Hoare(const char *path)
 
 int Hoare::compile(bool print)
 {
-	Driver parser;
+	// First of all we have to parse the given file.
+	Drive parser;
 	parser.parse(path);
 	if (!parser.code) {
 		return 1;
 	}
 
+	// LLVM requires this, otherwise it will crash.
 	llvm::InitializeNativeTarget();
 
+	// Generate the code.
 	Context context(path);
 	context.generateCode(parser.code);
+	if (!context.problems.empty()) {
+		return 1;
+	}
+
+	// The code could be compiled, now it's time to print/execute it.
 	if (print) {
 		Printer printer;
 		printer.print(context);

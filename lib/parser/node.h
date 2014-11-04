@@ -14,6 +14,8 @@ namespace llvm {
 	class Value;
 }
 
+// TODO: the code generation should not be in the "parser" dir.
+
 namespace hoare {
 
 /*
@@ -62,8 +64,6 @@ public:
 	std::vector<NStatement *> statements;
 };
 
-//class NProcess : public Node
-
 class NName : public NExpression
 {
 public:
@@ -73,14 +73,14 @@ public:
 		line = -1;
 		startColumn = 0;
 		endColumn = 0;
-		declaration = false;
 	}
+
+	virtual llvm::Value * generateValue(Context *context) override;
 
 public:
 	std::string name;
 	int line;
 	int startColumn, endColumn;
-	bool declaration;
 };
 
 class NString : public NExpression
@@ -133,9 +133,11 @@ public:
 	{
 	}
 
+	virtual llvm::Value * generateValue(Context *context) override;
+
 public:
-	NName &left;
-	NNumeric &right;
+	NName left;
+	NNumeric right;
 };
 
 class NFunctionCall : public NStatement

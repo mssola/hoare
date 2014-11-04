@@ -48,18 +48,52 @@ llvm::Value * NNumeric::generateValue(Context *context)
 
 llvm::Value * NDeclaration::generateValue(Context *context)
 {
+	// First we check whether the type exists.
 	auto type = Types::of(right.name);
 	if (!type) {
 		auto msg = "type `" + right.name + "` not found";
+		// TODO: offer the possibility of "Did you mean?" (like clang).
 		Problem p(right.line, right.startColumn, right.endColumn, msg);
+		context->problems.push_back(p);
+		return nullptr;
+	}
+
+	// We cannot re-declare variables.
+	auto locals = context->getBlocks().locals();
+	if (locals.find(left.name) != locals.end()) {
+		auto msg = "variable `" + left.name + "` has already been declared" +
+			" in this scope";
+		// TODO: show where it has been declared for the first time.
+		Problem p(left.line, left.startColumn, left.endColumn, msg);
 		context->problems.push_back(p);
 		return nullptr;
 	}
 
 	auto alloc = new llvm::AllocaInst(type, left.name.c_str(),
 		context->getBlocks().current());
-	context->getBlocks().locals()[right.name] = alloc;
+	context->getBlocks().locals()[left.name] = alloc;
 	return alloc;
+}
+
+llvm::Value * NAssign::generateValue(Context *context)
+{
+	// TODO
+	return nullptr;
+}
+
+llvm::Value * NName::generateValue(Context *context)
+{
+	auto locals = context->getBlocks().locals();
+
+	if (locals.find(name) == locals.end()) {
+		auto msg = "variable `" + name + "` not declared in this scope";
+		Problem p(line, startColumn, endColumn, msg);
+		context->problems.push_back(p);
+		return nullptr;
+	}
+
+	return new llvm::LoadInst(locals[name], "", false,
+		context->getBlocks().current());
 }
 
 llvm::Value * NString::generateValue(Context *context)

@@ -1,0 +1,8 @@
+
+variable:integer;
+another:integer;
+
+variable := 2;
+another := variable + 3;
+printf("%d\n", another);
+

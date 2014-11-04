@@ -133,7 +133,6 @@ stmt: declaration
 
 declaration: name ':' name
 	{
-		$1->declaration = true;
 		$<stmt>$ = new hoare::NDeclaration(*$1, *$3);
 	}
 ;
