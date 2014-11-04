@@ -17,10 +17,9 @@
 using namespace hoare;
 
 Context::Context(const std::string &path)
-	: path(path)
+	: path(path), problems(Problems(path))
 {
 	module = new llvm::Module("main", llvm::getGlobalContext());
-	problems.clear();
 }
 
 void Context::generateCode(NCode *code)
@@ -49,11 +48,7 @@ void Context::generateCode(NCode *code)
 	/* Push a new variable/block context */
 	blocks.push(bblock);
 	code->generateValue(this);
-	if (!problems.empty()) {
-		for (auto &p : problems) {
-			p.print(path);
-		}
-	}
+	problems.print();
 
     auto zero = llvm::Constant::getNullValue(
 		llvm::IntegerType::getInt32Ty(llvm::getGlobalContext())

@@ -8,6 +8,7 @@
 #define HOARE_PROBLEM_H
 
 #include <string>
+#include <vector>
 
 namespace hoare {
 
@@ -29,6 +30,31 @@ private:
 public:
 	unsigned int line, startColumn, endColumn;
 	std::string message;
+};
+
+class Problems
+{
+public:
+	Problems();
+	explicit Problems(const std::string &path);
+	virtual ~Problems();
+
+	void addProblem(unsigned int line, unsigned int column,
+		const std::string &message);
+	void addProblem(unsigned int line, unsigned int startColumn,
+		unsigned int endColumn, const std::string &message);
+	void operator<<(const Problem &problem);
+
+	inline const bool empty() const
+	{
+		return problems.empty();
+	}
+
+	void print();
+
+private:
+	std::string path;
+	std::vector<Problem> problems;
 };
 
 }

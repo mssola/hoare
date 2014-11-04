@@ -99,3 +99,56 @@ std::string Problem::absolutePath(const std::string &path) const
 	return path;
 }
 
+Problems::Problems()
+	: Problems("")
+{
+}
+
+Problems::Problems(const std::string &path)
+	: path(path)
+{
+	problems.clear();
+}
+
+Problems::~Problems()
+{
+	problems.clear();
+}
+
+void Problems::addProblem(unsigned int line, unsigned int column,
+	const std::string &message)
+{
+	Problem p(line, column, message);
+	problems.push_back(p);
+}
+
+void Problems::addProblem(unsigned int line, unsigned int startColumn,
+	unsigned int endColumn, const std::string &message)
+{
+	Problem p(line, startColumn, endColumn, message);
+	problems.push_back(p);
+}
+
+void Problems::operator<<(const Problem &problem)
+{
+	problems.push_back(problem);
+}
+
+void Problems::print()
+{
+	if (problems.empty()) {
+		return;
+	}
+
+	for (auto &p : problems) {
+		p.print(path);
+	}
+
+	std::string str = std::to_string(problems.size()) + " error";
+	if (problems.size() >= 1) {
+		str += "s";
+	}
+	str += " generated.\n";
+	llvm::outs() << str;
+}
+

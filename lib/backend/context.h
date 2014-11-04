@@ -35,7 +35,7 @@ public:
 	}
 
 public:
-	std::vector<Problem> problems;
+	Problems problems;
 
 private:
 	std::string path;

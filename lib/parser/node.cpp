@@ -53,8 +53,8 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 	if (!type) {
 		auto msg = "type `" + right.name + "` not found";
 		// TODO: offer the possibility of "Did you mean?" (like clang).
-		Problem p(right.line, right.startColumn, right.endColumn, msg);
-		context->problems.push_back(p);
+		context->problems.addProblem(right.line, right.startColumn,
+			right.endColumn, msg);
 		return nullptr;
 	}
 
@@ -64,8 +64,8 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 		auto msg = "variable `" + left.name + "` has already been declared" +
 			" in this scope";
 		// TODO: show where it has been declared for the first time.
-		Problem p(left.line, left.startColumn, left.endColumn, msg);
-		context->problems.push_back(p);
+		context->problems.addProblem(left.line, left.startColumn,
+			left.endColumn, msg);
 		return nullptr;
 	}
 
@@ -87,8 +87,7 @@ llvm::Value * NName::generateValue(Context *context)
 
 	if (locals.find(name) == locals.end()) {
 		auto msg = "variable `" + name + "` not declared in this scope";
-		Problem p(line, startColumn, endColumn, msg);
-		context->problems.push_back(p);
+		context->problems.addProblem(line, startColumn, endColumn, msg);
 		return nullptr;
 	}
 
@@ -129,7 +128,7 @@ llvm::Value * NFunctionCall::generateValue(Context *context)
 	auto function = context->getModule()->getFunction("printf");
 	if (!function) {
 		auto msg = "function `printf` not found";
-		context->problems.push_back(Problem(0, 0, msg));
+		context->problems << Problem(0, 0, msg);
 		return nullptr;
 	}
 

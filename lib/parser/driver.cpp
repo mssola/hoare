@@ -15,12 +15,10 @@ using namespace hoare;
 Driver::Driver()
 {
 	code = nullptr;
-	problems.clear();
 }
 
 Driver::~Driver()
 {
-	problems.clear();
 	if (code) {
 		delete code;
 	}
@@ -29,7 +27,7 @@ Driver::~Driver()
 void Driver::parse(const std::string &path)
 {
 	// Reset the previous state if we are coming from a previous execution.
-	problems.clear();
+	problems = Problems(path);
 	if (code) {
 		delete code;
 		code = nullptr;
@@ -42,22 +40,18 @@ void Driver::parse(const std::string &path)
 	}
 
 	// Show all the problems that have occurred so far.
-	for (auto &p : problems) {
-		p.print(path);
-	}
+	problems.print();
 }
 
 void Driver::addProblem(const std::string &message)
 {
-	Problem p;
 	scanner.pushback();
 
 	if (scanner.counter > 0) {
-		p = Problem(scanner.line, (scanner.column - scanner.counter),
+		problems << Problem(scanner.line, (scanner.column - scanner.counter),
 			scanner.column, message);
 	} else {
-		p = Problem(scanner.line, scanner.column, message);
+		problems << Problem(scanner.line, scanner.column, message);
 	}
-	problems.push_back(p);
 }
 

@@ -33,7 +33,7 @@ public:
 	Scanner scanner;
 
 private:
-	std::vector<Problem> problems;
+	Problems problems;
 };
 
 }
