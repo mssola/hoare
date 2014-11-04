@@ -1,6 +1,7 @@
 
 variable:integer;
 another:integer;
+yetanother:character;
 
 variable := 2;
 another := variable + 3;

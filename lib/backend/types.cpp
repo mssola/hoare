@@ -15,6 +15,8 @@ llvm::Type * Types::of(std::string &name)
 {
 	if (name == "integer") {
 		return llvm::Type::getInt64Ty(llvm::getGlobalContext());
+	} else if (name == "character") {
+		return llvm::Type::getInt8Ty(llvm::getGlobalContext());
 	}
 	return nullptr;
 }
