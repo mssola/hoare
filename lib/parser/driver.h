@@ -16,7 +16,6 @@ namespace hoare {
 
 class NCode;
 
-// TODO: rename to driver.
 class Driver
 {
 public:

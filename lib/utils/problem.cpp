@@ -42,7 +42,7 @@ void Problem::printReport(const std::string &path)
 	llvm::outs() << absolutePath(path) << ":";
 
 	if (line != 0 && startColumn != 0 && endColumn != 0) {
-		llvm::outs() << line << ":" << startColumn << ":";
+		llvm::outs() << line + 1 << ":" << startColumn + 1 << ":";
 	}
 
 	// We print that this is an error.
