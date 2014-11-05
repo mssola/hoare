@@ -20,11 +20,11 @@ public:
 	explicit Problem(unsigned int line, unsigned int startColumn,
 		unsigned int endColumn, std::string m);
 
-	void print(const std::string &path);
+	void print(const std::string &path) const;
 
 private:
-	void printReport(const std::string &path);
-	void printLine(const std::string &path);
+	void printReport(const std::string &path) const;
+	void printLine(const std::string &path) const;
 	std::string absolutePath(const std::string &path) const;
 
 public:
@@ -51,7 +51,7 @@ public:
 		return problems.empty();
 	}
 
-	void print();
+	void print() const;
 
 private:
 	std::string path;

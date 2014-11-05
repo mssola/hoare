@@ -28,14 +28,14 @@ Problem::Problem(unsigned int line, unsigned int startColumn,
 {
 }
 
-void Problem::print(const std::string &path)
+void Problem::print(const std::string &path) const
 {
 	printReport(path);
 	printLine(path);
 	llvm::outs().changeColor(llvm::raw_ostream::WHITE);
 }
 
-void Problem::printReport(const std::string &path)
+void Problem::printReport(const std::string &path) const
 {
 	// First of all we print the location of the problem.
 	llvm::outs().changeColor(llvm::raw_ostream::WHITE, true);
@@ -58,7 +58,7 @@ void Problem::printReport(const std::string &path)
 	llvm::outs() << "\n";
 }
 
-void Problem::printLine(const std::string &path)
+void Problem::printLine(const std::string &path) const
 {
 	std::string current;
 	std::ifstream in(path);
@@ -139,13 +139,13 @@ void Problems::operator<<(const Problem &problem)
 	problems.push_back(problem);
 }
 
-void Problems::print()
+void Problems::print() const
 {
 	if (problems.empty()) {
 		return;
 	}
 
-	for (auto &p : problems) {
+	for (const auto &p : problems) {
 		p.print(path);
 	}
 

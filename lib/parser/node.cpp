@@ -32,7 +32,7 @@ llvm::Value * NCode::generateValue(Context *context)
 {
 	llvm::Value *last = nullptr;
 
-	for (auto &it : statements) {
+	for (const auto &it : statements) {
 		last = it->generateValue(context);
 	}
 	return last;
@@ -135,7 +135,7 @@ llvm::Value * NFunctionCall::generateValue(Context *context)
 
 	// Push the arguments.
 	std::vector<llvm::Value *> arguments;
-	for (auto &a : args) {
+	for (const auto &a : args) {
 		arguments.push_back(a->generateValue(context));
 	}
 
