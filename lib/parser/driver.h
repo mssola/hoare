@@ -29,7 +29,7 @@ private:
 	char readEscape(Driver *driver);
 
 public:
-	NCode *code;
+	NBlock *code;
 	Scanner scanner;
 	Problems problems;
 };

@@ -22,7 +22,7 @@ Context::Context(const std::string &path, const Problems &problems)
 	module = new llvm::Module("main", llvm::getGlobalContext());
 }
 
-void Context::generateCode(NCode *code)
+void Context::generateCode(NBlock *code)
 {
 	// Add the builtins.
 	Builtins builtins;

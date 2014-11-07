@@ -28,7 +28,7 @@ llvm::Value * Node::generateValue(Context *context)
 	return nullptr;
 }
 
-llvm::Value * NCode::generateValue(Context *context)
+llvm::Value * NBlock::generateValue(Context *context)
 {
 	llvm::Value *last = nullptr;
 
@@ -38,12 +38,74 @@ llvm::Value * NCode::generateValue(Context *context)
 	return last;
 }
 
+NName::NName(std::string &name)
+	: name(name), line(-1), startColumn(0), endColumn(0)
+{
+}
+
+llvm::Value * NName::generateValue(Context *context)
+{
+	auto locals = context->getBlocks().locals();
+
+	if (locals.find(name) == locals.end()) {
+		auto msg = "variable `" + name + "` has not been declared in" +
+			" this scope";
+		context->problems.addProblem(line, startColumn, endColumn, msg);
+		return nullptr;
+	}
+
+	return new llvm::LoadInst(locals[name], "", false,
+		context->getBlocks().current());
+}
+
+NString::NString(std::string value)
+	: value(value)
+{
+}
+
+llvm::Value * NString::generateValue(Context *context)
+{
+	auto format = llvm::ConstantDataArray::getString(
+		llvm::getGlobalContext(), value.c_str()
+	);
+
+	auto module = context->getModule();
+	auto var = new llvm::GlobalVariable(
+		*module,
+		llvm::ArrayType::get(
+			llvm::IntegerType::get(llvm::getGlobalContext(), 8),
+			strlen(value.c_str())+1
+		),
+		true, llvm::GlobalValue::PrivateLinkage, format, ".str"
+	);
+
+	auto zero = llvm::Constant::getNullValue(
+		llvm::IntegerType::getInt32Ty(llvm::getGlobalContext())
+	);
+
+	std::vector<llvm::Constant *> indices;
+	indices.push_back(zero);
+	indices.push_back(zero);
+
+	return llvm::ConstantExpr::getGetElementPtr(var, indices);
+}
+
+NNumeric::NNumeric(unsigned long long value)
+	: value(value)
+{
+}
+
 llvm::Value * NNumeric::generateValue(Context *context)
 {
 	return llvm::ConstantInt::get(
 		llvm::Type::getInt64Ty(llvm::getGlobalContext()),
 		value, true
 	);
+}
+
+NDeclaration::NDeclaration(NName &left, NName &right)
+	: left(left), right(right)
+{
 }
 
 llvm::Value * NDeclaration::generateValue(Context *context)
@@ -75,52 +137,20 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 	return alloc;
 }
 
+NAssign::NAssign(NName &left, NNumeric &right)
+	: left(left), right(right)
+{
+}
+
 llvm::Value * NAssign::generateValue(Context *context)
 {
 	// TODO
 	return nullptr;
 }
 
-llvm::Value * NName::generateValue(Context *context)
+NFunctionCall::NFunctionCall(NExpressionList &args)
+	: args(args)
 {
-	auto locals = context->getBlocks().locals();
-
-	if (locals.find(name) == locals.end()) {
-		auto msg = "variable `" + name + "` has not been declared in" +
-			" this scope";
-		context->problems.addProblem(line, startColumn, endColumn, msg);
-		return nullptr;
-	}
-
-	return new llvm::LoadInst(locals[name], "", false,
-		context->getBlocks().current());
-}
-
-llvm::Value * NString::generateValue(Context *context)
-{
-    auto format = llvm::ConstantDataArray::getString(
-		llvm::getGlobalContext(), value.c_str()
-	);
-
-	auto module = context->getModule();
-    auto var = new llvm::GlobalVariable(
-        *module,
-		llvm::ArrayType::get(
-			llvm::IntegerType::get(llvm::getGlobalContext(), 8),
-			strlen(value.c_str())+1
-		),
-		true, llvm::GlobalValue::PrivateLinkage, format, ".str"
-	);
-
-    auto zero = llvm::Constant::getNullValue(
-		llvm::IntegerType::getInt32Ty(llvm::getGlobalContext())
-	);
-
-    std::vector<llvm::Constant *> indices;
-    indices.push_back(zero);
-    indices.push_back(zero);
-
-    return llvm::ConstantExpr::getGetElementPtr(var, indices);
 }
 
 llvm::Value * NFunctionCall::generateValue(Context *context)

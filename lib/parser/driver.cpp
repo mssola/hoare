@@ -36,7 +36,7 @@ void Driver::parse(const std::string &path)
 	// Parse the thing.
 	scanner = Scanner(path);
 	if (scanner.readFile()) {
-		code = new NCode();
+		code = new NBlock();
 		yyparse(this);
 	}
 }

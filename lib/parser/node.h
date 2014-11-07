@@ -49,7 +49,7 @@ class NStatement : public Node
 /*
  * TODO Rename to Block or something like that
  */
-class NCode : public Node
+class NBlock : public Node
 {
 public:
 	virtual llvm::Value * generateValue(Context *context) override;
@@ -67,13 +67,7 @@ public:
 class NName : public NExpression
 {
 public:
-	NName(std::string &name)
-		: name(name)
-	{
-		line = -1;
-		startColumn = 0;
-		endColumn = 0;
-	}
+	explicit NName(std::string &name);
 
 	virtual llvm::Value * generateValue(Context *context) override;
 
@@ -86,10 +80,7 @@ public:
 class NString : public NExpression
 {
 public:
-	NString(std::string value)
-		: value(value)
-	{
-	}
+	explicit NString(std::string value);
 
 	virtual llvm::Value * generateValue(Context *context) override;
 
@@ -100,10 +91,7 @@ public:
 class NNumeric : public NExpression
 {
 public:
-	NNumeric(unsigned long long value)
-		: value(value)
-	{
-	}
+	explicit NNumeric(unsigned long long value);
 
 	virtual llvm::Value * generateValue(Context *context) override;
 
@@ -114,10 +102,7 @@ public:
 class NDeclaration : public NStatement
 {
 public:
-	explicit NDeclaration(NName &left, NName &right)
-		: left(left), right(right)
-	{
-	}
+	explicit NDeclaration(NName &left, NName &right);
 
 	virtual llvm::Value * generateValue(Context *context) override;
 
@@ -128,10 +113,7 @@ public:
 class NAssign : public NStatement
 {
 public:
-	explicit NAssign(NName &left, NNumeric &right)
-		: left(left), right(right)
-	{
-	}
+	explicit NAssign(NName &left, NNumeric &right);
 
 	virtual llvm::Value * generateValue(Context *context) override;
 
@@ -143,17 +125,13 @@ public:
 class NFunctionCall : public NStatement
 {
 public:
-	explicit NFunctionCall(NExpressionList &args)
-		: args(args)
-	{
-	}
+	explicit NFunctionCall(NExpressionList &args);
 
 	virtual llvm::Value * generateValue(Context *context) override;
 
 public:
-	NExpressionList &args;
+	NExpressionList args;
 };
-
 
 }
 

@@ -25,10 +25,10 @@ Hoare::Hoare(const char *path)
 int Hoare::compile(bool print)
 {
 	// First of all we have to parse the given file.
-	Driver parser;
-	parser.parse(path);
-	if (!parser.code) {
-		parser.problems.print();
+	Driver driver;
+	driver.parse(path);
+	if (!driver.code) {
+		driver.problems.print();
 		return 1;
 	}
 
@@ -36,8 +36,8 @@ int Hoare::compile(bool print)
 	llvm::InitializeNativeTarget();
 
 	// Generate the code.
-	Context context(path, parser.problems);
-	context.generateCode(parser.code);
+	Context context(path, driver.problems);
+	context.generateCode(driver.code);
 	if (!context.problems.empty()) {
 		return 1;
 	}

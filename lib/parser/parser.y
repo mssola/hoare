@@ -32,7 +32,7 @@ static int yylex(YYSTYPE *lval, void *p)
 	std::string *name;
 	hoare::NString *string;
 	hoare::NStatement *stmt;
-	hoare::NCode *code;
+	hoare::NBlock *block;
 	hoare::NExpression *expr;
 	hoare::NName *ident;
 	hoare::NNumeric *num;
@@ -83,7 +83,7 @@ static int yylex(YYSTYPE *lval, void *p)
 %type<stmt> declaration process structured_command parallel_command
 %type<stmt> input_command output_command
 %type<stmt> alternative_command repetitive_command
-%type<code> stmts
+%type<block> stmts
 %type<exprlist> args
 %type<stmtlist> process_list
 
