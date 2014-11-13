@@ -9,12 +9,11 @@
 
 #include <utils/problem.h>
 #include <string>
-#include "node.h"
 #include "scanner.h"
 
 namespace hoare {
 
-class NCode;
+class NBlock;
 
 class Driver
 {

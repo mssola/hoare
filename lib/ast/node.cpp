@@ -5,8 +5,8 @@
  */
 
 #include "node.h"
-#include <backend/context.h>
-#include <backend/types.h>
+#include "types.h"
+#include <codegen/context.h>
 #include <llvm/IR/Constants.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>

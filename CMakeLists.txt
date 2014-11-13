@@ -50,7 +50,7 @@ add_executable(hoare
 
 target_link_libraries(hoare
   parser
-  backend
+  codegen
   ${llvm_libs}
 )
 

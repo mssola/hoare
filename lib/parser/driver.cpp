@@ -5,7 +5,7 @@
  */
 
 #include "driver.h"
-#include "node.h"
+#include <ast/node.h>
 #include <iostream>
 
 extern void yyparse(hoare::Driver *);

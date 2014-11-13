@@ -46,9 +46,6 @@ class NStatement : public Node
 {
 };
 
-/*
- * TODO Rename to Block or something like that
- */
 class NBlock : public Node
 {
 public:

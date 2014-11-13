@@ -5,7 +5,7 @@
  */
 
 #include <iostream>
-#include <parser/node.h>
+#include <ast/node.h>
 #include <parser/driver.h>
 #include <parser/scanner.h>
 #include <parser/parser.hpp>

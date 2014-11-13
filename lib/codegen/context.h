@@ -8,7 +8,7 @@
 #define HOARE_CONTEXT_H
 
 #include "blocks.h"
-#include <parser/node.h>
+#include <ast/node.h>
 #include <utils/problem.h>
 #include <llvm/IR/Function.h>
 #include <vector>
