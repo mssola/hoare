@@ -63,4 +63,8 @@ while (my $file = readdir(DIR)) {
 closedir(DIR);
 
 print "Oks: " . @oks . " Fails: " . @fails . "\n";
+if (@fails > 0) {
+    exit(1);
+}
+exit(0);
 
