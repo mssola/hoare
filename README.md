@@ -31,13 +31,13 @@ And it should produce the `hoare` executable file. This file can be executed
 like this:
 
     $ ./hoare file.hoare
-    $ ./hoare -f file.hoare
+    $ ./hoare -S file.hoare
 
 The first command will effectively execute the `file.hoare` file, and the
 second command will just print LLVM's IR code for the given file. Note that
 with the second command you can produce a binary file:
 
-    $ ./hoare -f file.hoare > file.bc
+    $ ./hoare -S file.hoare > file.bc
     $ clang file.bc -o file
     $ ./file
 
