@@ -4,11 +4,13 @@
  * See the LICENSE file.
  */
 
-#include "problem.h"
-#include <llvm/Support/raw_ostream.h>
-#include <fstream>
+#include <utils/problem.h>
+
 #include <cstdlib>
+#include <fstream>
 #include <unistd.h>
+
+#include <llvm/Support/raw_ostream.h>
 
 using namespace hoare;
 
@@ -24,7 +26,10 @@ Problem::Problem(unsigned int l, unsigned int c, std::string m)
 
 Problem::Problem(unsigned int line, unsigned int startColumn,
 	unsigned int endColumn, std::string m)
-	: line(line), startColumn(startColumn), endColumn(endColumn), message(m)
+	: line(line)
+	, startColumn(startColumn)
+	, endColumn(endColumn)
+	, message(m)
 {
 }
 
@@ -105,55 +110,55 @@ Problems::Problems()
 }
 
 Problems::Problems(const std::string &path)
-	: path(path)
+	: m_path(path)
 {
-	problems.clear();
+	m_problems.clear();
 }
 
 Problems::Problems(const Problems &problems)
-	: path(problems.path), problems(problems.problems)
+	: m_path(problems.m_path)
+	, m_problems(problems.m_problems)
 {
 }
 
 Problems::~Problems()
 {
-	problems.clear();
+	m_problems.clear();
 }
 
 void Problems::addProblem(unsigned int line, unsigned int column,
 	const std::string &message)
 {
 	Problem p(line, column, message);
-	problems.push_back(p);
+	m_problems.push_back(p);
 }
 
 void Problems::addProblem(unsigned int line, unsigned int startColumn,
 	unsigned int endColumn, const std::string &message)
 {
 	Problem p(line, startColumn, endColumn, message);
-	problems.push_back(p);
+	m_problems.push_back(p);
 }
 
 void Problems::operator<<(const Problem &problem)
 {
-	problems.push_back(problem);
+	m_problems.push_back(problem);
 }
 
 void Problems::print() const
 {
-	if (problems.empty()) {
+	if (m_problems.empty()) {
 		return;
 	}
 
-	for (const auto &p : problems) {
-		p.print(path);
+	for (const auto &p : m_problems) {
+		p.print(m_path);
 	}
 
-	std::string str = std::to_string(problems.size()) + " error";
-	if (problems.size() > 1) {
+	std::string str = std::to_string(m_problems.size()) + " error";
+	if (m_problems.size() > 1) {
 		str += "s";
 	}
 	str += " generated.\n";
 	llvm::outs() << str;
 }
-

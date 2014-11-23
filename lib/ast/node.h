@@ -110,7 +110,7 @@ public:
 class NAssign : public NStatement
 {
 public:
-	explicit NAssign(NName &left, NNumeric &right);
+	NAssign(NName &left, NNumeric &right);
 
 	virtual llvm::Value * generateValue(Context *context) override;
 
@@ -133,4 +133,3 @@ public:
 }
 
 #endif /* HOARE_NODE_H */
-

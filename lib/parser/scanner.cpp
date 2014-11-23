@@ -4,10 +4,12 @@
  * See the LICENSE file.
  */
 
+#include <parser/scanner.h>
+
 #include <iostream>
+
 #include <ast/node.h>
 #include <parser/driver.h>
-#include <parser/scanner.h>
 #include <parser/parser.hpp>
 
 #define IS_EOF() ((unsigned int) (actual - contents) >= length)
@@ -71,7 +73,7 @@ bool Scanner::readFile()
 
 int Scanner::lex(YYSTYPE *lval, Driver *driver)
 {
-	int c, aux;
+	int c;
 	char *prev;
 	std::string name = "";
 
@@ -312,4 +314,3 @@ bool Scanner::isValidIdentifier(const char *p)
 {
 	return (*p == '_' || isdigit(*p) || isUtf8Alpha(p));
 }
-

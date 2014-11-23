@@ -7,9 +7,10 @@
 #ifndef HOARE_PARSER_H
 #define HOARE_PARSER_H
 
-#include <utils/problem.h>
 #include <string>
-#include "scanner.h"
+
+#include <parser/scanner.h>
+#include <utils/problem.h>
 
 namespace hoare {
 
@@ -36,4 +37,3 @@ public:
 }
 
 #endif /* HOARE_PARSER_H */
-

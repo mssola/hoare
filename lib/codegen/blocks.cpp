@@ -4,7 +4,7 @@
  * See the LICENSE file.
  */
 
-#include "blocks.h"
+#include <codegen/blocks.h>
 
 namespace hoare {
 
@@ -23,4 +23,3 @@ void Blocks::pop()
 }
 
 }
-

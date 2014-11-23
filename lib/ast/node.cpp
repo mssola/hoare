@@ -4,14 +4,17 @@
  * See the LICENSE file.
  */
 
-#include "node.h"
-#include "types.h"
-#include <codegen/context.h>
+#include <ast/node.h>
+
+#include <iostream>
+
 #include <llvm/IR/Constants.h>
+#include <llvm/IR/Instructions.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
-#include <llvm/IR/Instructions.h>
-#include <iostream>
+
+#include <ast/types.h>
+#include <codegen/context.h>
 
 using namespace hoare;
 
@@ -39,13 +42,16 @@ llvm::Value * NBlock::generateValue(Context *context)
 }
 
 NName::NName(std::string &name)
-	: name(name), line(-1), startColumn(0), endColumn(0)
+	: name(name)
+	, line(-1)
+	, startColumn(0)
+	, endColumn(0)
 {
 }
 
 llvm::Value * NName::generateValue(Context *context)
 {
-	auto locals = context->getBlocks().locals();
+	auto locals = context->blocks.locals();
 
 	if (locals.find(name) == locals.end()) {
 		auto msg = "variable `" + name + "` has not been declared in" +
@@ -55,7 +61,7 @@ llvm::Value * NName::generateValue(Context *context)
 	}
 
 	return new llvm::LoadInst(locals[name], "", false,
-		context->getBlocks().current());
+		context->blocks.current());
 }
 
 NString::NString(std::string value)
@@ -69,7 +75,7 @@ llvm::Value * NString::generateValue(Context *context)
 		llvm::getGlobalContext(), value.c_str()
 	);
 
-	auto module = context->getModule();
+	auto module = context->module;
 	auto var = new llvm::GlobalVariable(
 		*module,
 		llvm::ArrayType::get(
@@ -104,7 +110,8 @@ llvm::Value * NNumeric::generateValue(Context *context)
 }
 
 NDeclaration::NDeclaration(NName &left, NName &right)
-	: left(left), right(right)
+	: left(left)
+	, right(right)
 {
 }
 
@@ -121,7 +128,7 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 	}
 
 	// We cannot re-declare variables.
-	auto locals = context->getBlocks().locals();
+	auto locals = context->blocks.locals();
 	if (locals.find(left.name) != locals.end()) {
 		auto msg = "variable `" + left.name + "` has already been declared" +
 			" in this scope";
@@ -132,8 +139,8 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 	}
 
 	auto alloc = new llvm::AllocaInst(type, left.name.c_str(),
-		context->getBlocks().current());
-	context->getBlocks().locals()[left.name] = alloc;
+		context->blocks.current());
+	context->blocks.locals()[left.name] = alloc;
 	return alloc;
 }
 
@@ -156,7 +163,7 @@ NFunctionCall::NFunctionCall(NExpressionList &args)
 llvm::Value * NFunctionCall::generateValue(Context *context)
 {
 	// Get the printn function.
-	auto function = context->getModule()->getFunction("printf");
+	auto function = context->module->getFunction("printf");
 	if (!function) {
 		auto msg = "function `printf` not found";
 		context->problems << Problem(0, 0, msg);
@@ -173,7 +180,6 @@ llvm::Value * NFunctionCall::generateValue(Context *context)
 	return llvm::CallInst::Create(
 		function,
 		llvm::makeArrayRef(arguments), "",
-		context->getBlocks().current()
+		context->blocks.current()
 	);
 }
-

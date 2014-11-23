@@ -4,11 +4,9 @@
  * See the LICENSE file.
  */
 
-#include <codegen/hoare.h>
 #include <llvm/Support/raw_ostream.h>
 #include <cstdlib>
-
-using namespace hoare;
+#include <codegen/hoare.h>
 
 void usage()
 {
@@ -26,7 +24,7 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	Hoare h(argv[argc - 1]);
+	hoare::Hoare h(argv[argc - 1]);
 	return h.compile(print);
 }
 

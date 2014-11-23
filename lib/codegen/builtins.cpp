@@ -4,11 +4,14 @@
  * See the LICENSE file.
  */
 
-#include "context.h"
-#include "builtins.h"
+#include <codegen/builtins.h>
+
+#include <iostream>
+
 #include <llvm/IR/Function.h>
 #include <llvm/IR/LLVMContext.h>
-#include <iostream>
+
+#include <codegen/context.h>
 
 using namespace hoare;
 
@@ -26,7 +29,7 @@ llvm::Function * Builtins::insertPrintFunction(Context *context)
 	auto func = llvm::Function::Create(
 		printf, llvm::Function::ExternalLinkage,
 		llvm::Twine("printf"),
-		context->getModule()
+		context->module
 	);
 	func->setCallingConv(llvm::CallingConv::C);
 	return func;
@@ -40,4 +43,3 @@ void Builtins::addInContext(Context *context)
 			<< std::endl;
 	}
 }
-

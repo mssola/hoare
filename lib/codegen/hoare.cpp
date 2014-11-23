@@ -4,12 +4,14 @@
  * See the LICENSE file.
  */
 
-#include "hoare.h"
-#include "context.h"
-#include "printer.h"
-#include <parser/driver.h>
+#include <codegen/hoare.h>
+
 #include <llvm/Support/TargetSelect.h>
 #include <llvm/ExecutionEngine/JIT.h>
+
+#include <codegen/context.h>
+#include <codegen/printer.h>
+#include <parser/driver.h>
 
 using namespace hoare;
 
@@ -18,7 +20,7 @@ Hoare::Hoare()
 }
 
 Hoare::Hoare(const char *path)
-	: path(path)
+	: m_path(path)
 {
 }
 
@@ -26,7 +28,7 @@ int Hoare::compile(bool print)
 {
 	// First of all we have to parse the given file.
 	Driver driver;
-	driver.parse(path);
+	driver.parse(m_path);
 	if (!driver.code) {
 		driver.problems.print();
 		return 1;
@@ -36,7 +38,7 @@ int Hoare::compile(bool print)
 	llvm::InitializeNativeTarget();
 
 	// Generate the code.
-	Context context(path, driver.problems);
+	Context context(m_path, driver.problems);
 	context.generateCode(driver.code);
 	if (!context.problems.empty()) {
 		return 1;

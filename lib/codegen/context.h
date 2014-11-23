@@ -18,33 +18,21 @@ namespace hoare {
 class Context
 {
 public:
-	explicit Context(const std::string &path, const Problems &problems);
+	Context(const std::string &path, const Problems &problems);
 
 	void generateCode(NBlock *code);
 	void run();
 
-	inline llvm::Module * getModule() const
-	{
-		return module;
-	}
-
-	// TODO
-	inline Blocks getBlocks() const
-	{
-		return blocks;
-	}
-
 public:
 	Problems problems;
+	Blocks blocks;
+	llvm::Module *module;
 
 private:
-	std::string path;
-	llvm::Module *module;
-	llvm::Function *main;
-	Blocks blocks;
+	std::string m_path;
+	llvm::Function *m_main;
 };
 
 }
 
 #endif /* HOARE_CONTEXT_H */
-

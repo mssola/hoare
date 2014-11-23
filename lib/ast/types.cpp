@@ -4,10 +4,11 @@
  * See the LICENSE file.
  */
 
-#include "types.h"
-#include <llvm/IR/Type.h>
+#include <ast/types.h>
+
 #include <llvm/IR/DerivedTypes.h>
 #include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Type.h>
 
 using namespace hoare;
 
@@ -20,4 +21,3 @@ llvm::Type * Types::of(std::string &name)
 	}
 	return nullptr;
 }
-

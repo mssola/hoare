@@ -4,9 +4,11 @@
  * See the LICENSE file.
  */
 
-#include "driver.h"
-#include <ast/node.h>
+#include <parser/driver.h>
+
 #include <iostream>
+
+#include <ast/node.h>
 
 extern void yyparse(hoare::Driver *);
 
@@ -52,4 +54,3 @@ void Driver::addProblem(const std::string &message)
 		problems << Problem(scanner.line, scanner.column, message);
 	}
 }
-

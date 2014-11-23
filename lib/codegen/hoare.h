@@ -20,10 +20,9 @@ public:
 	int compile(bool print = false);
 
 private:
-	std::string path;
+	std::string m_path;
 };
 
 }
 
 #endif /* HOARE_HOARE_H */
-

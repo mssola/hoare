@@ -16,8 +16,8 @@ class Problem
 {
 public:
 	Problem();
-	explicit Problem(unsigned int l, unsigned int c, std::string m);
-	explicit Problem(unsigned int line, unsigned int startColumn,
+	Problem(unsigned int l, unsigned int c, std::string m);
+	Problem(unsigned int line, unsigned int startColumn,
 		unsigned int endColumn, std::string m);
 
 	void print(const std::string &path) const;
@@ -48,17 +48,16 @@ public:
 
 	inline const bool empty() const
 	{
-		return problems.empty();
+		return m_problems.empty();
 	}
 
 	void print() const;
 
 private:
-	std::string path;
-	std::vector<Problem> problems;
+	std::string m_path;
+	std::vector<Problem> m_problems;
 };
 
 }
 
 #endif /* HOARE_PROBLEM_H */
-

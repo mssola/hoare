@@ -7,6 +7,8 @@
 #ifndef HOARE_LEXER_H
 #define HOARE_LEXER_H
 
+#include <string>
+
 // TODO: free the contents.
 
 union YYSTYPE;
@@ -50,4 +52,3 @@ private:
 }
 
 #endif /* HOARE_LEXER_H */
-

@@ -7,7 +7,7 @@
 #ifndef HOARE_PRINTER_H
 #define HOARE_PRINTER_H
 
-#include "context.h"
+#include <codegen/context.h>
 
 namespace hoare {
 
@@ -22,4 +22,3 @@ public:
 }
 
 #endif /* HOARE_PRINTER_H */
-
