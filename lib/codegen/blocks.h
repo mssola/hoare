@@ -28,10 +28,10 @@ namespace llvm {
 
 namespace hoare {
 
-typedef struct {
+using Block = struct {
 	llvm::BasicBlock *block;
 	std::map<std::string, llvm::Value *> locals;
-} Block;
+};
 
 class Blocks
 {
@@ -41,16 +41,16 @@ public:
 
 	inline llvm::BasicBlock * current() const
 	{
-		return blocks.top()->block;
+		return m_blocks.top()->block;
 	}
 
 	inline std::map<std::string, llvm::Value *> & locals() const
 	{
-		return blocks.top()->locals;
+		return m_blocks.top()->locals;
 	}
 
 private:
-	std::stack<Block *> blocks;
+	std::stack<Block *> m_blocks;
 };
 
 }

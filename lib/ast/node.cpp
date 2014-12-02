@@ -89,7 +89,7 @@ llvm::Value * NString::generateValue(Context *context)
 		*module,
 		llvm::ArrayType::get(
 			llvm::IntegerType::get(llvm::getGlobalContext(), 8),
-			strlen(value.c_str())+1
+			strlen(value.c_str()) + 1
 		),
 		true, llvm::GlobalValue::PrivateLinkage, format, ".str"
 	);

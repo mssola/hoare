@@ -17,20 +17,18 @@
 
 #include <codegen/blocks.h>
 
-namespace hoare {
+using namespace hoare;
 
 void Blocks::push(llvm::BasicBlock *block)
 {
 	auto b = new Block;
 	b->block = block;
-	blocks.push(b);
+	m_blocks.push(b);
 }
 
 void Blocks::pop()
 {
-	auto top = blocks.top();
-	blocks.pop();
+	auto top = m_blocks.top();
+	m_blocks.pop();
 	delete top;
-}
-
 }

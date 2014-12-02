@@ -58,7 +58,7 @@ void Context::generateCode(NBlock *code)
 		"entry", m_main, 0
 	);
 
-	/* Push a new variable/block context */
+	// Push a new variable/block context.
 	blocks.push(bblock);
 	code->generateValue(this);
 	problems.print();
