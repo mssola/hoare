@@ -17,8 +17,6 @@
 
 #include <parser/scanner.h>
 
-#include <iostream>
-
 #include <ast/node.h>
 #include <parser/driver.h>
 #include <parser/parser.hpp>

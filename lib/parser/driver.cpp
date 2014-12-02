@@ -17,8 +17,6 @@
 
 #include <parser/driver.h>
 
-#include <iostream>
-
 #include <ast/node.h>
 
 extern void yyparse(hoare::Driver *);

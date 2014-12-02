@@ -17,12 +17,10 @@
 
 %{
 
-// TODO
-#include <iostream>
 #include <cstring>
+
 #include <ast/node.h>
 #include <parser/driver.h>
-#include <parser/scanner.h>
 
 #ifdef yyerror
 #undef yyerror

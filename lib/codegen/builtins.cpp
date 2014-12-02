@@ -17,8 +17,6 @@
 
 #include <codegen/builtins.h>
 
-#include <iostream>
-
 #include <llvm/IR/Function.h>
 #include <llvm/IR/LLVMContext.h>
 
@@ -50,7 +48,7 @@ void Builtins::addInContext(Context *context)
 {
 	auto print = insertPrintFunction(context);
 	if (!print) {
-		std::cout << "Fatal: could not insert builtin function `printf`."
-			<< std::endl;
+        std::string str = "could not insert builtin function `printf`";
+        context->problems.addProblem(0, 0, str);
 	}
 }

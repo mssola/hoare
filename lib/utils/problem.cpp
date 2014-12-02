@@ -17,7 +17,6 @@
 
 #include <utils/problem.h>
 
-#include <cstdlib>
 #include <fstream>
 #include <unistd.h>
 
