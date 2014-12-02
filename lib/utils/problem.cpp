@@ -81,6 +81,9 @@ void Problem::printLine(const std::string &path) const
 	for (int i = 0; i < line + 1; i++) {
 		getline(in, current);
 	}
+	if (current == "") {
+		return;
+	}
 
 	// Point the start of the word.
 	std::string high;

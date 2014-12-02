@@ -48,7 +48,7 @@ void Builtins::addInContext(Context *context)
 {
 	auto print = insertPrintFunction(context);
 	if (!print) {
-        std::string str = "could not insert builtin function `printf`";
-        context->problems.addProblem(0, 0, str);
+		std::string str = "could not insert builtin function `printf`";
+		context->problems.addProblem(0, 0, str);
 	}
 }
