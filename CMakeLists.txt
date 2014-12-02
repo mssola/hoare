@@ -54,3 +54,5 @@ target_link_libraries(hoare
   ${llvm_libs}
 )
 
+install(TARGETS hoare DESTINATION bin)
+
