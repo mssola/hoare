@@ -36,7 +36,6 @@ public:
 private:
 	void printReport(const std::string &path) const;
 	void printLine(const std::string &path) const;
-	std::string absolutePath(const std::string &path) const;
 
 public:
 	unsigned int line, startColumn, endColumn;

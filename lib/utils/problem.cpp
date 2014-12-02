@@ -18,7 +18,6 @@
 #include <utils/problem.h>
 
 #include <fstream>
-#include <unistd.h>
 
 #include <llvm/Support/raw_ostream.h>
 
@@ -54,7 +53,7 @@ void Problem::printReport(const std::string &path) const
 {
 	// First of all we print the location of the problem.
 	llvm::outs().changeColor(llvm::raw_ostream::WHITE, true);
-	llvm::outs() << absolutePath(path) << ":";
+	llvm::outs() << path << ":";
 
 	if (line != 0 && startColumn != 0 && endColumn != 0) {
 		llvm::outs() << line + 1 << ":" << startColumn + 1 << ":";
@@ -104,17 +103,6 @@ void Problem::printLine(const std::string &path) const
 	llvm::outs() << current << "\n";
 	llvm::outs().changeColor(llvm::raw_ostream::GREEN, true);
 	llvm::outs() << high << "\n";
-}
-
-std::string Problem::absolutePath(const std::string &path) const
-{
-	char buffer[256];
-	auto dir = getcwd(buffer, 256);
-
-	if (dir) {
-		return std::string(dir) + "/" + path;
-	}
-	return path;
 }
 
 Problems::Problems()
