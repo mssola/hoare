@@ -18,11 +18,13 @@
 #ifndef HOARE_CONTEXT_H
 #define HOARE_CONTEXT_H
 
-#include "blocks.h"
-#include <ast/node.h>
-#include <utils/problem.h>
-#include <llvm/IR/Function.h>
 #include <vector>
+
+#include <llvm/IR/Function.h>
+
+#include <ast/node.h>
+#include <codegen/blocks.h>
+#include <utils/problem.h>
 
 namespace hoare {
 
@@ -46,4 +48,4 @@ private:
 
 }
 
-#endif /* HOARE_CONTEXT_H */
+#endif // HOARE_CONTEXT_H

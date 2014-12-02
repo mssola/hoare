@@ -36,4 +36,4 @@ private:
 
 }
 
-#endif /* HOARE_HOARE_H */
+#endif // HOARE_HOARE_H

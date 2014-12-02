@@ -32,4 +32,4 @@ public:
 
 }
 
-#endif /* HOARE_PRINTER_H */
+#endif // HOARE_PRINTER_H

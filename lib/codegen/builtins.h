@@ -37,4 +37,4 @@ private:
 
 }
 
-#endif /* HOARE_BUILTINS_H */
+#endif // HOARE_BUILTINS_H

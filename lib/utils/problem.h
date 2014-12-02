@@ -70,4 +70,4 @@ private:
 
 }
 
-#endif /* HOARE_PROBLEM_H */
+#endif // HOARE_PROBLEM_H

@@ -55,4 +55,4 @@ private:
 
 }
 
-#endif /* HOARE_BLOCKS_H */
+#endif // HOARE_BLOCKS_H

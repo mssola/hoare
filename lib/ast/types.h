@@ -34,5 +34,5 @@ public:
 
 }
 
-#endif /* HOARE_TYPES_H */
+#endif // HOARE_TYPES_H
 

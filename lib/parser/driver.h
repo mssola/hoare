@@ -47,4 +47,4 @@ public:
 
 }
 
-#endif /* HOARE_PARSER_H */
+#endif // HOARE_PARSER_H

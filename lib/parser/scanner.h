@@ -62,4 +62,4 @@ private:
 
 }
 
-#endif /* HOARE_LEXER_H */
+#endif // HOARE_LEXER_H

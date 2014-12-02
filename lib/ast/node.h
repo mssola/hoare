@@ -25,8 +25,6 @@ namespace llvm {
 	class Value;
 }
 
-// TODO: the code generation should not be in the "parser" dir.
-
 namespace hoare {
 
 /*
@@ -37,8 +35,8 @@ class Context;
 class NExpression;
 class NStatement;
 
-typedef std::vector<NExpression *> NExpressionList;
-typedef std::vector<NStatement *> NStatementList;
+using NExpressionList = std::vector<NExpression *>;
+using NStatementList = std::vector<NStatement *>;
 
 class Node
 {
@@ -143,4 +141,4 @@ public:
 
 }
 
-#endif /* HOARE_NODE_H */
+#endif // HOARE_NODE_H
