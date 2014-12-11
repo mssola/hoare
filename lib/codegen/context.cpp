@@ -63,7 +63,7 @@ void Context::generateCode(NBlock *code)
 	code->generateValue(this);
 	problems.print();
 
-    auto zero = llvm::Constant::getNullValue(
+	auto zero = llvm::Constant::getNullValue(
 		llvm::IntegerType::getInt32Ty(llvm::getGlobalContext())
 	);
 	llvm::ReturnInst::Create(llvm::getGlobalContext(), zero, bblock);

@@ -28,8 +28,8 @@ llvm::Function * Builtins::insertPrintFunction(Context *context)
 {
 	// The first argument: char *. The rest of arguments are specified later as
 	// a variable length list.
-    std::vector<llvm::Type *> args;
-    args.push_back(llvm::Type::getInt8PtrTy(llvm::getGlobalContext()));
+	std::vector<llvm::Type *> args;
+	args.push_back(llvm::Type::getInt8PtrTy(llvm::getGlobalContext()));
 
 	auto printf = llvm::FunctionType::get(
 		llvm::Type::getInt32Ty(llvm::getGlobalContext()), args, true
