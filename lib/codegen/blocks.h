@@ -28,7 +28,7 @@ namespace llvm {
 
 namespace hoare {
 
-using Block = struct {
+using Block = struct BlockType {
 	llvm::BasicBlock *block;
 	std::map<std::string, llvm::Value *> locals;
 };
