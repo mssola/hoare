@@ -21,6 +21,13 @@
 void usage()
 {
 	llvm::outs() << "usage: hoare [-S] <file>\n";
+	exit(1);
+}
+
+void unknown(const std::string &arg)
+{
+	llvm::outs() << "hoare: error: unknown argument '" << arg << "'\n";
+	usage();
 }
 
 int main(int argc, char *argv[])
@@ -28,10 +35,12 @@ int main(int argc, char *argv[])
 	bool print = false;
 
 	if (argc == 3) {
+		if (strncmp(argv[1], "-S", 2) != 0) {
+			unknown(argv[1]);
+		}
 		print = true;
 	} else if (argc != 2) {
 		usage();
-		exit(1);
 	}
 
 	hoare::Hoare h(argv[argc - 1]);

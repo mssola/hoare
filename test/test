@@ -53,7 +53,7 @@ while (my $file = readdir(DIR)) {
     my $name = $file;
     $name =~ s/\.hoare//;
 
-    `./$exe -f $files/$file > $expected/$file`;
+    `./$exe -S $files/$file > $expected/$file`;
     my $out = `diff $expected/$name.txt $expected/$file`;
     if ($out eq '') {
         print "$name: OK\n";
