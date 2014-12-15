@@ -45,7 +45,7 @@ void Printer::print(const Context &context)
 	std::string file = filename(context.path());
 	std::string ec;
 
-	llvm::raw_fd_ostream stream(file.c_str(), ec, llvm::sys::fs::F_None);
+	llvm::raw_fd_ostream stream(file.c_str(), ec, llvm::sys::fs::F_RW);
 	llvm::PassManager pm;
 	pm.add(llvm::createPrintModulePass(stream));
 	pm.run(*module);
