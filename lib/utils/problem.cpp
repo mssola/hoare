@@ -46,7 +46,6 @@ void Problem::print(const std::string &path) const
 {
 	printReport(path);
 	printLine(path);
-	llvm::outs().changeColor(llvm::raw_ostream::WHITE);
 }
 
 void Problem::printReport(const std::string &path) const
@@ -65,11 +64,9 @@ void Problem::printReport(const std::string &path) const
 
 	// And we print the error message.
 	llvm::outs().changeColor(llvm::raw_ostream::WHITE, true);
-	llvm::outs() << message << ".";
+	llvm::outs() << message << ".\n";
 
-	// And print the end of line with no more bolding.
 	llvm::outs().changeColor(llvm::raw_ostream::WHITE);
-	llvm::outs() << "\n";
 }
 
 void Problem::printLine(const std::string &path) const
@@ -103,6 +100,7 @@ void Problem::printLine(const std::string &path) const
 	llvm::outs() << current << "\n";
 	llvm::outs().changeColor(llvm::raw_ostream::GREEN, true);
 	llvm::outs() << high << "\n";
+	llvm::outs().changeColor(llvm::raw_ostream::WHITE);
 }
 
 Problems::Problems()
