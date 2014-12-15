@@ -21,7 +21,7 @@
 #include <llvm/ExecutionEngine/JIT.h>
 
 #include <codegen/context.h>
-#include <codegen/printer.h>
+#include <codegen/emitter.h>
 #include <parser/driver.h>
 
 using namespace hoare;
@@ -49,8 +49,8 @@ int Hoare::compile(const char *path, bool print)
 
 	// The code could be compiled, now it's time to print/execute it.
 	if (print) {
-		Printer printer;
-		printer.print(context);
+		Emitter em;
+		em.emit(context);
 	} else {
 		context.run();
 	}

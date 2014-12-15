@@ -15,21 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HOARE_PRINTER_H
-#define HOARE_PRINTER_H
+#ifndef HOARE_EMITTER_H
+#define HOARE_EMITTER_H
 
 #include <codegen/context.h>
 
 namespace hoare {
 
-class Printer
+struct Emitter
 {
-public:
-	Printer();
-
-	void print(const Context &context);
+	void emit(const Context &context);
 };
 
 }
 
-#endif // HOARE_PRINTER_H
+#endif // HOARE_EMITTER_H

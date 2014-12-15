@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <codegen/printer.h>
+#include <codegen/emitter.h>
 
 #include <llvm/ExecutionEngine/ExecutionEngine.h>
 #include <llvm/IR/IRPrintingPasses.h>
@@ -35,11 +35,7 @@ std::string && filename(const std::string &path)
 
 }
 
-Printer::Printer()
-{
-}
-
-void Printer::print(const Context &context)
+void Emitter::emit(const Context &context)
 {
 	auto module = context.module;
 	std::string file = filename(context.path());
