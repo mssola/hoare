@@ -55,6 +55,7 @@ public:
 	unsigned int line, column, prevc, counter;
 	unsigned int length;
 	char *contents, *actual;
+	bool stopProblems;
 
 private:
 	std::string path;

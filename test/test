@@ -13,7 +13,7 @@ use Cwd 'abs_path', 'getcwd';
 
 # The base path that this script will use. By default it picks the root of the
 # project.
-my $base = abs_path(getcwd . '/..');
+my $base = '..';
 
 # The build directory relative to the $base path.
 my $build = 'build';

@@ -37,6 +37,7 @@ Scanner::Scanner(const std::string &filename)
 	column = 0;
 	prevc = 0;
 	length = 0;
+	stopProblems = false;
 	contents = nullptr;
 	actual = nullptr;
 }
@@ -173,11 +174,19 @@ retry:
 		}
 		break;
 	case '"':
+	{
+		int startl = line;
+		int startc = column;
+
 		c = nextc();
 		counter++;
 		while (c != '"') {
 			if (c == EOF) {
-				driver->addProblem("unterminated string");
+				line = startl;
+				column = startc - 1;
+				counter = 0;
+				driver->addProblem("unterminated string", false);
+				stopProblems = true;
 				return tEND;
 			}
 			if (c == '\\') {
@@ -192,6 +201,7 @@ retry:
 		}
 		lval->name = new std::string(name);
 		return tSTRING;
+	}
 	default:
 		// Check if this is a numeric value.
 		if (isdigit(c)) {

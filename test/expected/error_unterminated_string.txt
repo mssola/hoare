@@ -1,0 +1,4 @@
+[0;1;37m../test/files/error_unterminated_string.hoare:2:8:[0;1;31m error: [0;1;37munterminated string.
+[0;37mprintf("Hello open);
+[0;1;32m       ^
+[0;37m1 error generated.

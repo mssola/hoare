@@ -34,7 +34,7 @@ public:
 	~Driver();
 
 	void parse(const std::string &path);
-	void addProblem(const std::string &message);
+	void addProblem(const std::string &message, bool pushback = true);
 
 private:
 	char readEscape(Driver *driver);

@@ -52,9 +52,14 @@ void Driver::parse(const std::string &path)
 	}
 }
 
-void Driver::addProblem(const std::string &message)
+void Driver::addProblem(const std::string &message, bool pushback)
 {
-	scanner.pushback();
+	if (scanner.stopProblems) {
+		return;
+	}
+	if (pushback) {
+		scanner.pushback();
+	}
 
 	if (scanner.counter > 0) {
 		problems << Problem(scanner.line, (scanner.column - scanner.counter),
