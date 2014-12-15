@@ -28,7 +28,11 @@ chdir "$base/$build";
 if (-f $exe) {
     `rm $exe`;
 }
-`cmake .. && make`;
+my $make = 'make';
+if (-f 'rules.ninja') {
+    $make = 'ninja';
+}
+`cmake .. && $make`;
 if (-f "$base/$build/$exe") {
     print "Build was successful.\n";
 } else {
