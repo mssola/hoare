@@ -18,32 +18,71 @@
 #include <llvm/Support/raw_ostream.h>
 #include <codegen/hoare.h>
 
-void usage()
+constexpr int major = 0;
+constexpr int minor = 1;
+constexpr int patch = 0;
+
+void version()
 {
-	llvm::outs() << "usage: hoare [-S] <file>\n";
-	exit(1);
+	if (patch == 0) {
+		printf("hoare version %d.%d\n", major, minor);
+	} else {
+		printf("hoare version %d.%d.%d\n", major, minor, patch);
+	}
+	exit(0);
+}
+
+void usage(int status)
+{
+	llvm::outs() << "usage: hoare [options] <files>\n";
+	llvm::outs() << "Options:\n";
+	llvm::outs() << "  -h, --help    \tShow this message.\n";
+	llvm::outs() << "  -S            \tEmit the LLVM representation assembler.\n";
+	llvm::outs() << "  -v, --version \tShow the current version.\n";
+	exit(status);
 }
 
 void unknown(const std::string &arg)
 {
 	llvm::outs() << "hoare: error: unknown argument '" << arg << "'\n";
-	usage();
+	usage(1);
 }
 
 int main(int argc, char *argv[])
 {
+	int index;
 	bool print = false;
 
-	if (argc == 3) {
-		if (strncmp(argv[1], "-S", 2) != 0) {
-			unknown(argv[1]);
+	for (index = 1; index < argc; index++) {
+		std::string str(argv[index]);
+
+		if (str == "-S") {
+			print = true;
+		} else if (str == "-h" || str == "--help") {
+			usage(0);
+		} else if (str == "-v" || str == "--version") {
+			version();
+		} else {
+			if (str[0] == '-') {
+				llvm::outs() <<
+					"hoare: error: unrecognized command line option '" <<
+					str << "'\n";
+			}
+			break;
 		}
-		print = true;
-	} else if (argc != 2) {
-		usage();
 	}
 
-	hoare::Hoare h(argv[argc - 1]);
-	return h.compile(print);
+	if (index == argc) {
+		llvm::outs() << "hoare: error: no input files\n";
+		exit(1);
+	}
+
+	hoare::Hoare h;
+	for (; index < argc; index++) {
+		if (!h.compile(argv[index], print)) {
+			return 1;
+		}
+	}
+	return 0;
 }
 

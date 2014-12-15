@@ -18,20 +18,12 @@
 #ifndef HOARE_HOARE_H
 #define HOARE_HOARE_H
 
-#include <string>
-
 namespace hoare {
 
 class Hoare
 {
 public:
-	Hoare();
-	explicit Hoare(const char *path);
-
-	int compile(bool print = false);
-
-private:
-	std::string m_path;
+	int compile(const char *path, bool print);
 };
 
 }

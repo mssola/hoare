@@ -26,33 +26,25 @@
 
 using namespace hoare;
 
-Hoare::Hoare()
-{
-}
-
-Hoare::Hoare(const char *path)
-	: m_path(path)
-{
-}
-
-int Hoare::compile(bool print)
+int Hoare::compile(const char *path, bool print)
 {
 	// First of all we have to parse the given file.
+	std::string file(path);
 	Driver driver;
-	driver.parse(m_path);
+	driver.parse(file);
 	if (!driver.code) {
 		driver.problems.print();
-		return 1;
+		return 0;
 	}
 
 	// LLVM requires this, otherwise it will crash.
 	llvm::InitializeNativeTarget();
 
 	// Generate the code.
-	Context context(m_path, driver.problems);
+	Context context(file, driver.problems);
 	context.generateCode(driver.code);
 	if (!context.problems.empty()) {
-		return 1;
+		return 0;
 	}
 
 	// The code could be compiled, now it's time to print/execute it.
@@ -63,6 +55,6 @@ int Hoare::compile(bool print)
 		context.run();
 	}
 
-	return 0;
+	return 1;
 }
 
