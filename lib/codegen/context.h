@@ -36,6 +36,11 @@ public:
 	void generateCode(NBlock *code);
 	void run();
 
+	inline const std::string & path() const
+	{
+		return m_path;
+	}
+
 public:
 	Problems problems;
 	Blocks blocks;

@@ -21,8 +21,19 @@
 #include <llvm/IR/IRPrintingPasses.h>
 #include <llvm/PassManager.h>
 #include <llvm/Support/raw_ostream.h>
+#include <llvm/Support/FileSystem.h>
 
 using namespace hoare;
+
+namespace {
+
+std::string && filename(const std::string &path)
+{
+	int idx = path.find_last_of(".");
+	return std::move(path.substr(0, idx) + ".ll");
+}
+
+}
 
 Printer::Printer()
 {
@@ -31,8 +42,12 @@ Printer::Printer()
 void Printer::print(const Context &context)
 {
 	auto module = context.module;
+	std::string file = filename(context.path());
+	std::string ec;
 
+	llvm::raw_fd_ostream stream(file.c_str(), ec, llvm::sys::fs::F_None);
 	llvm::PassManager pm;
-	pm.add(llvm::createPrintModulePass(llvm::outs()));
+	pm.add(llvm::createPrintModulePass(stream));
 	pm.run(*module);
+	stream.close();
 }
