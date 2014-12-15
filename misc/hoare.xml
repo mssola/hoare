@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+
+<!--
+Copyright (C) 2014 Miquel Sabaté Solà <mikisabate@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<language name="Hoare" version="0.1" kateversion="3.4" section="Sources" extensions="*.hoare" author="Miquel Sabaté Solà (mikisabate@gmail.com)" license="GPL">
+    <highlighting>
+
+    <list name="types">
+        <item>character</item>
+        <item>integer</item>
+    </list>
+
+    <contexts>
+        <context name="normal" attribute="Normal Text" lineEndContext="#stay">
+            <keyword attribute="Data Type" context="#stay" String="types" />
+            <DetectIdentifier />
+            <DetectChar attribute="Comment" context="Comment" char="#" />
+            <Int attribute="Decimal" context="#stay" />
+            <Float attribute="Float" context="#stay" />
+            <HlCOct attribute="Octal" context="#stay"/>
+            <HlCHex attribute="Hex" context="#stay" />
+            <HlCChar attribute="Char" context="#stay" />
+            <DetectChar attribute="String" context="String" char="&quot;" />
+        </context>
+
+        <context attribute="Comment" lineEndContext="#pop" name="Comment">
+            <IncludeRules context="##Alerts" />
+        </context>
+
+        <context attribute="String" lineEndContext="#pop" name="String">
+            <LineContinue  attribute="String" context="#stay" />
+            <HlCStringChar attribute="String Char" context="#stay" />
+            <DetectChar    attribute="String" context="#pop" char="&quot;" />
+        </context>
+    </contexts>
+
+    <itemDatas>
+        <itemData name="Normal Text"  defStyleNum="dsNormal"   spellChecking="false" />
+        <itemData name="Data Type"    defStyleNum="dsDataType" spellChecking="false" />
+        <itemData name="Comment"      defStyleNum="dsComment" />
+        <itemData name="Decimal"      defStyleNum="dsDecVal" spellChecking="false" />
+        <itemData name="Char"         defStyleNum="dsChar"   spellChecking="false" />
+        <itemData name="String Char"  defStyleNum="dsChar" />
+        <itemData name="String"       defStyleNum="dsString" />
+    </itemDatas>
+
+    </highlighting>
+
+    <general>
+        <comments><comment name="singleLine" start="#" /></comments>
+        <keywords casesensitive="1" additionalDeliminator="'&quot;" />
+    </general>
+</language>
