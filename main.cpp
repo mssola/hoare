@@ -42,12 +42,6 @@ void usage(int status)
 	exit(status);
 }
 
-void unknown(const std::string &arg)
-{
-	llvm::outs() << "hoare: error: unknown argument '" << arg << "'\n";
-	usage(1);
-}
-
 int main(int argc, char *argv[])
 {
 	int index;
