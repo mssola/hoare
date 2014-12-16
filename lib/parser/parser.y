@@ -31,7 +31,7 @@
 static int yylex(YYSTYPE *lval, void *p)
 {
 	hoare::Driver *driver = static_cast<hoare::Driver *>(p);
-	return driver->scanner.lex(lval, driver);
+	return driver->scanner->lex(lval, driver);
 }
 
 %}
@@ -391,9 +391,9 @@ expr: name
 name: tNAME
 	{
 		$$ = new hoare::NName(*$1);
-		$$->line = driver->scanner.line;
-		$$->startColumn = (driver->scanner.column - strlen($$->name.c_str()));
-		$$->endColumn = driver->scanner.column - 1;
+		$$->line = driver->scanner->line;
+		$$->startColumn = (driver->scanner->column - strlen($$->name.c_str()));
+		$$->endColumn = driver->scanner->column - 1;
 		delete $1;
 	}
 ;

@@ -18,6 +18,7 @@
 #ifndef HOARE_PARSER_H
 #define HOARE_PARSER_H
 
+#include <memory>
 #include <string>
 
 #include <parser/scanner.h>
@@ -41,7 +42,7 @@ private:
 
 public:
 	NBlock *code;
-	Scanner scanner;
+	std::unique_ptr<Scanner> scanner;
 	Problems problems;
 };
 

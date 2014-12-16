@@ -45,7 +45,7 @@ Scanner::Scanner(const std::string &filename)
 Scanner::~Scanner()
 {
 	if (contents) {
-		delete contents;
+		free(contents);
 	}
 }
 

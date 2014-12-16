@@ -45,8 +45,8 @@ void Driver::parse(const std::string &path)
 	}
 
 	// Parse the thing.
-	scanner = Scanner(path);
-	if (scanner.readFile()) {
+	scanner = std::make_unique<Scanner>(path);
+	if (scanner->readFile()) {
 		code = new NBlock();
 		yyparse(this);
 	}
@@ -54,17 +54,17 @@ void Driver::parse(const std::string &path)
 
 void Driver::addProblem(const std::string &message, bool pushback)
 {
-	if (scanner.stopProblems) {
+	if (scanner->stopProblems) {
 		return;
 	}
 	if (pushback) {
-		scanner.pushback();
+		scanner->pushback();
 	}
 
-	if (scanner.counter > 0) {
-		problems << Problem(scanner.line, (scanner.column - scanner.counter),
-			scanner.column, message);
+	if (scanner->counter > 0) {
+		problems << Problem(scanner->line, (scanner->column - scanner->counter),
+			scanner->column, message);
 	} else {
-		problems << Problem(scanner.line, scanner.column, message);
+		problems << Problem(scanner->line, scanner->column, message);
 	}
 }
