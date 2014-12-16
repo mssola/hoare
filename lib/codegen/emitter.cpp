@@ -45,5 +45,4 @@ void Emitter::emit(const Context &context)
 	llvm::PassManager pm;
 	pm.add(llvm::createPrintModulePass(stream));
 	pm.run(*module);
-	stream.close();
 }
