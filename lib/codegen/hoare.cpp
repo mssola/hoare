@@ -21,12 +21,11 @@
 #include <llvm/ExecutionEngine/JIT.h>
 
 #include <codegen/context.h>
-#include <codegen/emitter.h>
 #include <parser/driver.h>
 
 using namespace hoare;
 
-int Hoare::compile(const char *path, bool print)
+bool hoare::compile(const char *path, bool print)
 {
 	// First of all we have to parse the given file.
 	std::string file(path);
@@ -34,27 +33,21 @@ int Hoare::compile(const char *path, bool print)
 	driver.parse(file);
 	if (!driver.code) {
 		driver.problems.print();
-		return 0;
+		return false;
 	}
-
-	// LLVM requires this, otherwise it will crash.
-	llvm::InitializeNativeTarget();
 
 	// Generate the code.
 	Context context(file, driver.problems);
 	context.generateCode(driver.code);
 	if (!context.problems.empty()) {
-		return 0;
+		return false;
 	}
 
 	// The code could be compiled, now it's time to print/execute it.
 	if (print) {
-		Emitter em;
-		em.emit(context);
-	} else {
-		context.run();
+		return context.emit();
 	}
-
-	return 1;
+	llvm::InitializeNativeTarget();
+	return context.run();
 }
 

@@ -34,12 +34,8 @@ public:
 	Context(const std::string &path, const Problems &problems);
 
 	void generateCode(NBlock *code);
-	void run();
-
-	inline const std::string & path() const
-	{
-		return m_path;
-	}
+	bool emit();
+	bool run();
 
 public:
 	Problems problems;

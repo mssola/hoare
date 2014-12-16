@@ -20,11 +20,7 @@
 
 namespace hoare {
 
-class Hoare
-{
-public:
-	int compile(const char *path, bool print);
-};
+bool compile(const char *path, bool print);
 
 }
 

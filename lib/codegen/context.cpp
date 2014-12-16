@@ -20,13 +20,26 @@
 #include <llvm/ExecutionEngine/ExecutionEngine.h>
 #include <llvm/ExecutionEngine/GenericValue.h>
 #include <llvm/IR/Instructions.h>
+#include <llvm/IR/IRPrintingPasses.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
+#include <llvm/PassManager.h>
+#include <llvm/Support/FileSystem.h>
 #include <llvm/Support/raw_ostream.h>
 
 #include <codegen/builtins.h>
 
 using namespace hoare;
+
+namespace {
+
+std::string filename(const std::string &path)
+{
+	int idx = path.find_last_of(".");
+	return path.substr(0, idx) + ".ll";
+}
+
+}
 
 Context::Context(const std::string &path, const Problems &problems)
 	: problems(problems)
@@ -70,7 +83,19 @@ void Context::generateCode(NBlock *code)
 	blocks.pop();
 }
 
-void Context::run()
+bool Context::emit()
+{
+	std::string file = filename(m_path);
+	std::string ec;
+
+	llvm::raw_fd_ostream stream(file.c_str(), ec, llvm::sys::fs::F_RW);
+	llvm::PassManager pm;
+	pm.add(llvm::createPrintModulePass(stream));
+	pm.run(*module);
+	return true;
+}
+
+bool Context::run()
 {
 	std::string str;
 	std::vector<llvm::GenericValue> noargs;
@@ -79,8 +104,10 @@ void Context::run()
 	if (str != "") {
 		Problem problem(0, 0, str);
 		problem.print(m_path);
-	} else {
-		ee->runFunction(m_main, noargs);
+		return false;
 	}
+
+	ee->runFunction(m_main, noargs);
+	return true;
 }
 

@@ -77,9 +77,8 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	hoare::Hoare h;
 	for (; index < argc; index++) {
-		if (!h.compile(argv[index], print)) {
+		if (!hoare::compile(argv[index], print)) {
 			return 1;
 		}
 	}
