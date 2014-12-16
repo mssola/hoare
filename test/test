@@ -49,12 +49,26 @@ my @fails = ();
 # And finally execute the tests.
 opendir(DIR, "$base/test/files") or die $!;
 while (my $file = readdir(DIR)) {
+    # Ignore hidden files and strip the extension.
     next if ($file =~ m/^\./);
     my $name = $file;
     $name =~ s/\.hoare//;
 
-    `./$exe -S $files/$file > $expected/$file`;
-    my $out = `diff $expected/$name.txt $expected/$file`;
+    # If the tests starts with `error_` it means that we are checking for a
+    # compile error. In this case we want to redirect to output to a specific
+    # file. Otherwise, we'll just compare the .ll file with the expected result.
+    my $out = '';
+    if ($name =~ /^error_/) {
+        `./$exe -S $files/$file > test.txt`;
+        $out = `diff test.txt $expected/$name.txt`;
+        `rm test.txt`;
+    } else {
+        `./$exe -S $files/$file`;
+        $out = `diff $base/test/files/$name.ll $expected/$name.txt`;
+        `rm $base/test/files/$name.ll`;
+    }
+
+    # If the diff gave no output, then it's fine.
     if ($out eq '') {
         print "$name: OK\n";
         push(@oks, $name);
