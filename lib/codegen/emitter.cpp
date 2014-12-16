@@ -27,10 +27,10 @@ using namespace hoare;
 
 namespace {
 
-std::string && filename(const std::string &path)
+std::string filename(const std::string &path)
 {
 	int idx = path.find_last_of(".");
-	return std::move(path.substr(0, idx) + ".ll");
+	return path.substr(0, idx) + ".ll";
 }
 
 }
