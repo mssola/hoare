@@ -74,7 +74,7 @@ void Problem::printLine(const std::string &path) const
 	std::string current;
 	std::ifstream in(path);
 
-	for (int i = 0; i < line + 1; i++) {
+	for (unsigned int i = 0; i < line + 1; i++) {
 		getline(in, current);
 	}
 	if (current == "") {
@@ -83,7 +83,7 @@ void Problem::printLine(const std::string &path) const
 
 	// Point the start of the word.
 	std::string high;
-	for (int i = 0; i < startColumn; i++) {
+	for (unsigned int i = 0; i < startColumn; i++) {
 		if (current[i] == '\t') {
 			high += '\t';
 		} else {
@@ -93,7 +93,7 @@ void Problem::printLine(const std::string &path) const
 	high += "^";
 
 	// Highlight the word.
-	for (int i = startColumn; i < endColumn; i++) {
+	for (unsigned int i = startColumn; i < endColumn; i++) {
 		high += "~";
 	}
 
