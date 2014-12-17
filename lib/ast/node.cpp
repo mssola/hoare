@@ -147,6 +147,9 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 		return nullptr;
 	}
 
+	// TODO: there's gotta be a better way to declare variables.
+	context->blocks.top()->unused.insert(left.name);
+
 	auto alloc = new llvm::AllocaInst(type, left.name.c_str(),
 		context->blocks.current());
 	context->blocks.locals()[left.name] = alloc;

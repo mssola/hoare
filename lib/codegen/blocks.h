@@ -19,6 +19,7 @@
 #define HOARE_BLOCKS_H
 
 #include <map>
+#include <set>
 #include <stack>
 
 namespace llvm {
@@ -31,6 +32,7 @@ namespace hoare {
 using Block = struct BlockType {
 	llvm::BasicBlock *block;
 	std::map<std::string, llvm::Value *> locals;
+	std::set<std::string> unused;
 };
 
 class Blocks
@@ -38,6 +40,11 @@ class Blocks
 public:
 	void push(llvm::BasicBlock *block);
 	void pop();
+
+	inline Block * top() const
+	{
+		return m_blocks.top();
+	}
 
 	inline llvm::BasicBlock * current() const
 	{
