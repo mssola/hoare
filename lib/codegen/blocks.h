@@ -19,6 +19,7 @@
 #define HOARE_BLOCKS_H
 
 #include <map>
+#include <memory>
 #include <set>
 #include <stack>
 
@@ -41,7 +42,7 @@ public:
 	void push(llvm::BasicBlock *block);
 	void pop();
 
-	inline Block * top() const
+	inline std::shared_ptr<Block> top() const
 	{
 		return m_blocks.top();
 	}
@@ -57,7 +58,7 @@ public:
 	}
 
 private:
-	std::stack<Block *> m_blocks;
+	std::stack<std::shared_ptr<Block>> m_blocks;
 };
 
 }

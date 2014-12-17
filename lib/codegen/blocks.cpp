@@ -21,7 +21,7 @@ using namespace hoare;
 
 void Blocks::push(llvm::BasicBlock *block)
 {
-	auto b = new Block;
+	auto b = std::make_shared<Block>();
 	b->block = block;
 	m_blocks.push(b);
 }
@@ -30,5 +30,4 @@ void Blocks::pop()
 {
 	auto top = m_blocks.top();
 	m_blocks.pop();
-	delete top;
 }
