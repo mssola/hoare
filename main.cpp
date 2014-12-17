@@ -32,14 +32,32 @@ void version()
 	exit(0);
 }
 
-void usage(int status)
+void usage()
 {
 	llvm::outs() << "usage: hoare [options] <files>\n";
 	llvm::outs() << "Options:\n";
 	llvm::outs() << "  -h, --help    \tShow this message.\n";
 	llvm::outs() << "  -S            \tEmit the LLVM representation assembler.\n";
 	llvm::outs() << "  -v, --version \tShow the current version.\n";
-	exit(status);
+	exit(0);
+}
+
+/**
+ * Checks whether the given file not only exists, but it can also be read by
+ * the current process.
+ */
+bool fileReadable(const char *path)
+{
+	FILE *file = fopen(path, "r");
+
+	if (file != NULL) {
+		fclose(file);
+		return true;
+	}
+
+	std::string msg("hoare: error: " + std::string(path));
+	perror(msg.c_str());
+	return false;
 }
 
 int main(int argc, char *argv[])
@@ -53,7 +71,7 @@ int main(int argc, char *argv[])
 		if (str == "-S") {
 			print = true;
 		} else if (str == "-h" || str == "--help") {
-			usage(0);
+			usage();
 		} else if (str == "-v" || str == "--version") {
 			version();
 		} else {
@@ -61,20 +79,26 @@ int main(int argc, char *argv[])
 				llvm::outs() <<
 					"hoare: error: unrecognized command line option '" <<
 					str << "'\n";
+			} else {
+				break;
 			}
-			break;
 		}
 	}
 
-	if (index == argc) {
-		llvm::outs() << "hoare: error: no input files\n";
-		exit(1);
-	}
-
+	unsigned int compiled = 0;
 	for (; index < argc; index++) {
+		if (!fileReadable(argv[index])) {
+			continue;
+		}
 		if (!hoare::compile(argv[index], print)) {
 			return 1;
 		}
+		compiled++;
+	}
+
+	if (!compiled) {
+		llvm::outs() << "hoare: error: no input files\n";
+		exit(1);
 	}
 	return 0;
 }
