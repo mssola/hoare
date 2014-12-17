@@ -21,17 +21,76 @@
 #include <parser/driver.h>
 #include <parser/parser.hpp>
 
-#define IS_EOF() ((unsigned int) (actual - contents) >= length)
-
 using namespace hoare;
 
-Scanner::Scanner()
-	: Scanner("")
+namespace {
+
+char readEscape(Driver *driver, char nextChar)
 {
+	// Octals, \h, \u escape characters are not supported, too lazy :P
+
+	switch (nextChar) {
+	case '\\':
+		return nextChar;
+	case '0':
+		return '\0';
+	case 'n':
+		return '\n';
+	case 't':
+		return '\t';
+	case 'r':
+		return '\r';
+	case 'f':
+		return '\f';
+	case 'v':
+		return '\13';
+	case 'a':
+		return '\007';
+	case 'e':
+		return 033;
+	case 'b':
+		return '\010';
+	case '\'':
+		return '\'';
+	case '"':
+		return '"';
+	}
+
+	driver->addProblem("unknown escape character");
+	return 0;
 }
 
-Scanner::Scanner(const std::string &filename)
-	: path(filename)
+/*
+ * Some macros to make easier the UTF-8 support
+ */
+#define isUtf(c) ((c & 0xC0) != 0x80)
+#define isSpecial(c) (utf8CharSize(c) > 1)
+
+int utf8CharSize(const char *s)
+{
+	int size = 0;
+	int i = 0;
+
+	do {
+		i++;
+		size++;
+	} while (s[i] && !isUtf(s[i]));
+	return size;
+}
+
+int isUtf8Alpha(const char *str)
+{
+	return isSpecial(str) ? 1 : isalpha(*str);
+}
+
+bool isValidIdentifier(const char *p)
+{
+	return (*p == '_' || isdigit(*p) || isUtf8Alpha(p));
+}
+
+}
+
+Scanner::Scanner()
 {
 	line = 0;
 	column = 0;
@@ -49,7 +108,7 @@ Scanner::~Scanner()
 	}
 }
 
-bool Scanner::readFile()
+bool Scanner::readFile(const std::string &path)
 {
 	/* Open specified file */
 	FILE *fd = fopen(path.c_str(), "r");
@@ -190,7 +249,7 @@ retry:
 				return tEND;
 			}
 			if (c == '\\') {
-				c = readEscape(driver);
+				c = readEscape(driver, nextc());
 				if (c == 0) {
 					return tEND;
 				}
@@ -245,7 +304,7 @@ unsigned int Scanner::nextc()
 {
 	int c;
 
-	if (IS_EOF()) {
+	if ((actual - contents) >= length) {
 		return EOF;
 	}
 
@@ -269,67 +328,3 @@ void Scanner::pushback()
 	}
 }
 
-char Scanner::readEscape(Driver *driver)
-{
-	int c;
-
-	// Octals, \h, \u escape characters are not supported, too lazy :P
-
-	switch (c = nextc()) {
-	case '\\':
-		return c;
-	case '0':
-		return '\0';
-	case 'n':
-		return '\n';
-	case 't':
-		return '\t';
-	case 'r':
-		return '\r';
-	case 'f':
-		return '\f';
-	case 'v':
-		return '\13';
-	case 'a':
-		return '\007';
-	case 'e':
-		return 033;
-	case 'b':
-		return '\010';
-	case '\'':
-		return '\'';
-	case '"':
-		return '"';
-	}
-
-	driver->addProblem("unknown escape character");
-	return 0;
-}
-
-/*
- * Some macros to make easier the UTF-8 support
- */
-#define isUtf(c) ((c & 0xC0) != 0x80)
-#define isSpecial(c) (utf8CharSize(c) > 1)
-
-int Scanner::utf8CharSize(const char *s)
-{
-	int size = 0;
-	int i = 0;
-
-	do {
-		i++;
-		size++;
-	} while (s[i] && !isUtf(s[i]));
-	return size;
-}
-
-int Scanner::isUtf8Alpha(const char *str)
-{
-	return isSpecial(str) ? 1 : isalpha(*str);
-}
-
-bool Scanner::isValidIdentifier(const char *p)
-{
-	return (*p == '_' || isdigit(*p) || isUtf8Alpha(p));
-}

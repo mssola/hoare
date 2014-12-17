@@ -45,8 +45,8 @@ void Driver::parse(const std::string &path)
 	}
 
 	// Parse the thing.
-	scanner = std::make_unique<Scanner>(path);
-	if (scanner->readFile()) {
+	scanner = std::make_unique<Scanner>();
+	if (scanner->readFile(path)) {
 		code = new NBlock();
 		yyparse(this);
 	}
