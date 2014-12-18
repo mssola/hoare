@@ -30,16 +30,23 @@ allows me to use features from C++11 and C++14. To build this guy you need
 And it should produce the `hoare` executable file. This file can be executed
 like this:
 
-    $ ./hoare file.hoare
-    $ ./hoare -S file.hoare
+    $ hoare file.hoare
+    $ hoare -S file.hoare
 
-The first command will effectively execute the `file.hoare` file, and the
-second command will just print LLVM's IR code for the given file. Note that
-with the second command you can produce a binary file:
+The first command will effectively execute the `file.hoare` file. The
+second command will produce a `.ll` file (`file.ll` in our previous
+example). This `.ll` file contains the same input file translated into LLVM's
+IR. Note that you can compile this file with `clang` in order to produce a
+binary file. For example:
 
-    $ ./hoare -S file.hoare > file.bc
-    $ clang file.bc -o file
+    $ hoare -S file.hoare
+    $ clang file.ll -o file
     $ ./file
+
+Moreover, you can pass as many input files as you want in a simple command. The
+usage of this compiler is as follows:
+
+    hoare [options] <input files>
 
 ## License
 
