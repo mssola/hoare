@@ -24,6 +24,7 @@
 
 #include <ast/types.h>
 #include <codegen/context.h>
+#include <utils/defines.h>
 
 using namespace hoare;
 
@@ -35,8 +36,10 @@ Node::~Node()
 {
 }
 
-llvm::Value * Node::generateValue(Context *)
+llvm::Value * Node::generateValue(Context *context)
 {
+	UNUSED(context);
+
 	return nullptr;
 }
 
@@ -110,8 +113,10 @@ NNumeric::NNumeric(unsigned long long v)
 {
 }
 
-llvm::Value * NNumeric::generateValue(Context *)
+llvm::Value * NNumeric::generateValue(Context *context)
 {
+	UNUSED(context);
+
 	return llvm::ConstantInt::get(
 		llvm::Type::getInt64Ty(llvm::getGlobalContext()),
 		value, true
@@ -158,9 +163,10 @@ NAssign::NAssign(NName &l, NNumeric &r) : left(l), right(r)
 {
 }
 
-llvm::Value * NAssign::generateValue(Context *)
+llvm::Value * NAssign::generateValue(Context *context)
 {
 	// TODO
+	UNUSED(context);
 	return nullptr;
 }
 
