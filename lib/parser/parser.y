@@ -47,7 +47,7 @@ static int yylex(YYSTYPE *lval, void *p)
 	hoare::NNumeric *num;
 	hoare::NExpressionList *exprlist;
 	hoare::NStatementList *stmtlist;
-	unsigned long long numeric;
+	long long numeric;
 	int token;
 }
 

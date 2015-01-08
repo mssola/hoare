@@ -56,7 +56,7 @@ public:
 		unsigned int endColumn, const std::string &message);
 	void operator<<(const Problem &problem);
 
-	inline const bool empty() const
+	inline bool empty() const
 	{
 		return m_problems.empty();
 	}

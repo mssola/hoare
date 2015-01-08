@@ -79,8 +79,8 @@ public:
 
 public:
 	std::string name;
-	int line;
-	int startColumn, endColumn;
+	unsigned int line;
+	unsigned int startColumn, endColumn;
 };
 
 class NString : public NExpression

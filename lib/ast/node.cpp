@@ -35,7 +35,7 @@ Node::~Node()
 {
 }
 
-llvm::Value * Node::generateValue(Context *context)
+llvm::Value * Node::generateValue(Context *)
 {
 	return nullptr;
 }
@@ -50,9 +50,9 @@ llvm::Value * NBlock::generateValue(Context *context)
 	return last;
 }
 
-NName::NName(std::string &name)
-	: name(name)
-	, line(-1)
+NName::NName(std::string &n)
+	: name(n)
+	, line(0)
 	, startColumn(0)
 	, endColumn(0)
 {
@@ -73,8 +73,8 @@ llvm::Value * NName::generateValue(Context *context)
 		context->blocks.current());
 }
 
-NString::NString(std::string value)
-	: value(value)
+NString::NString(std::string v)
+	: value(v)
 {
 }
 
@@ -105,12 +105,12 @@ llvm::Value * NString::generateValue(Context *context)
 	return llvm::ConstantExpr::getGetElementPtr(var, indices);
 }
 
-NNumeric::NNumeric(unsigned long long value)
-	: value(value)
+NNumeric::NNumeric(unsigned long long v)
+	: value(v)
 {
 }
 
-llvm::Value * NNumeric::generateValue(Context *context)
+llvm::Value * NNumeric::generateValue(Context *)
 {
 	return llvm::ConstantInt::get(
 		llvm::Type::getInt64Ty(llvm::getGlobalContext()),
@@ -118,9 +118,7 @@ llvm::Value * NNumeric::generateValue(Context *context)
 	);
 }
 
-NDeclaration::NDeclaration(NName &left, NName &right)
-	: left(left)
-	, right(right)
+NDeclaration::NDeclaration(NName &l, NName &r) : left(l), right(r)
 {
 }
 
@@ -156,19 +154,17 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 	return alloc;
 }
 
-NAssign::NAssign(NName &left, NNumeric &right)
-	: left(left), right(right)
+NAssign::NAssign(NName &l, NNumeric &r) : left(l), right(r)
 {
 }
 
-llvm::Value * NAssign::generateValue(Context *context)
+llvm::Value * NAssign::generateValue(Context *)
 {
 	// TODO
 	return nullptr;
 }
 
-NFunctionCall::NFunctionCall(NExpressionList &args)
-	: args(args)
+NFunctionCall::NFunctionCall(NExpressionList &a) : args(a)
 {
 }
 

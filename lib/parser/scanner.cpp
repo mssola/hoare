@@ -25,13 +25,13 @@ using namespace hoare;
 
 namespace {
 
-char readEscape(Driver *driver, char nextChar)
+unsigned int readEscape(Driver *driver, char nextChar)
 {
 	// Octals, \h, \u escape characters are not supported, too lazy :P
 
 	switch (nextChar) {
 	case '\\':
-		return nextChar;
+		return static_cast<unsigned int>(nextChar);
 	case '0':
 		return '\0';
 	case 'n':
@@ -110,7 +110,7 @@ Scanner::~Scanner()
 
 bool Scanner::readFile(const std::string &path)
 {
-	/* Open specified file */
+	// Open specified file.
 	FILE *fd = fopen(path.c_str(), "r");
 	if (!fd) {
 		return false;
@@ -124,7 +124,7 @@ bool Scanner::readFile(const std::string &path)
 		fclose(fd);
 		return false;
 	}
-	contents = (char *) malloc(sizeof(char) * length);
+	contents = static_cast<char *>(malloc(sizeof(char) * length));
 
 	if (!contents) {
 		fclose(fd);
@@ -142,7 +142,7 @@ bool Scanner::readFile(const std::string &path)
 
 int Scanner::lex(YYSTYPE *lval, Driver *driver)
 {
-	int c;
+	unsigned int c;
 	char *prev;
 	std::string name = "";
 
@@ -152,13 +152,12 @@ retry:
 	counter = 0;
 
 	switch (c) {
-	case EOF:
 	case '\0':
 		return tEND;
 	case ' ': case '\t': case '\f': case '\r': case '\n': case '\13':
 		goto retry;
 	case '#':
-		for (c = nextc(); c != EOF && c != '\n'; c = nextc());
+		for (c = nextc(); c != 0 && c != '\n'; c = nextc());
 		goto retry;
 	case ':':
 		if (*actual == '=') {
@@ -234,13 +233,13 @@ retry:
 		break;
 	case '"':
 	{
-		int startl = line;
-		int startc = column;
+		unsigned int startl = line;
+		unsigned int startc = column;
 
 		c = nextc();
 		counter++;
 		while (c != '"') {
-			if (c == EOF) {
+			if (c == 0) {
 				line = startl;
 				column = startc - 1;
 				counter = 0;
@@ -263,12 +262,12 @@ retry:
 	}
 	default:
 		// Check if this is a numeric value.
-		if (isdigit(c)) {
+		if (isdigit(static_cast<int>(c))) {
 			do {
 				name += c;
 				c = nextc();
 				counter++;
-			} while (isdigit(c));
+			} while (isdigit(static_cast<int>(c)));
 			counter--;
 			pushback();
 			lval->numeric = std::stoll(name);
@@ -297,24 +296,23 @@ retry:
 		lval->name = new std::string(name);
 		return tNAME;
 	}
-	return c;
+	return static_cast<int>(c);
 }
 
 unsigned int Scanner::nextc()
 {
-	int c;
+	unsigned int c;
 
 	if ((actual - contents) >= length) {
-		return EOF;
+		return 0;
 	}
 
-	c = (unsigned char) *actual++;
-	prevc = column;
+	c = static_cast<unsigned int>(*actual++);
+	prevc = column++;
 	if (c == '\n') {
 		line++;
-		column = -1;
+		column = 0;
 	}
-	column++;
 	return c;
 }
 

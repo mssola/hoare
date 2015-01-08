@@ -33,11 +33,11 @@ Problem::Problem(unsigned int l, unsigned int c, std::string m)
 {
 }
 
-Problem::Problem(unsigned int line, unsigned int startColumn,
-	unsigned int endColumn, std::string m)
-	: line(line)
-	, startColumn(startColumn)
-	, endColumn(endColumn)
+Problem::Problem(unsigned int l, unsigned int startCol, unsigned int endCol,
+	std::string m)
+	: line(l)
+	, startColumn(startCol)
+	, endColumn(endCol)
 	, message(m)
 {
 }

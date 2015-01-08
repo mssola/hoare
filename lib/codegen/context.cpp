@@ -35,14 +35,14 @@ namespace {
 
 std::string filename(const std::string &path)
 {
-	int idx = path.find_last_of(".");
+	unsigned int idx = path.find_last_of(".");
 	return path.substr(0, idx) + ".ll";
 }
 
 }
 
-Context::Context(const std::string &path, const Problems &problems)
-	: problems(problems)
+Context::Context(const std::string &path, const Problems &probs)
+	: problems(probs)
 	, m_path(path)
 {
 	module = new llvm::Module("main", llvm::getGlobalContext());
