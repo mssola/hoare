@@ -25,13 +25,13 @@ using namespace hoare;
 
 namespace {
 
-unsigned int readEscape(Driver *driver, char nextChar)
+unsigned int readEscape(Driver *driver, unsigned char nextChar)
 {
 	// Octals, \h, \u escape characters are not supported, too lazy :P
 
 	switch (nextChar) {
 	case '\\':
-		return static_cast<unsigned int>(nextChar);
+		return nextChar;
 	case '0':
 		return '\0';
 	case 'n':
