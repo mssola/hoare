@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	unsigned int compiled = 0;
+	bool compiled = false;
 	for (; index < argc; index++) {
 		if (!fileReadable(argv[index])) {
 			continue;
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 		if (!hoare::compile(argv[index], print)) {
 			return 1;
 		}
-		compiled++;
+		compiled = true;
 	}
 
 	if (!compiled) {
