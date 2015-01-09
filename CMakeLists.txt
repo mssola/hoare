@@ -2,7 +2,7 @@ project(hoare)
 cmake_minimum_required(VERSION 2.8.0)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
-# Define all the real checks. The all can be found in the `cmake` directory.
+# Define all the real checks. They all can be found in the `cmake` directory.
 include(HFindLibs)
 include(HCompiler)
 
