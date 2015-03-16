@@ -27,6 +27,7 @@
 #include <llvm/Support/FileSystem.h>
 #include <llvm/Support/raw_ostream.h>
 
+#include <ast/node.h>
 #include <codegen/builtins.h>
 
 using namespace hoare;
@@ -35,7 +36,10 @@ namespace {
 
 std::string filename(const std::string &path)
 {
-	unsigned int idx = path.find_last_of(".");
+	size_t idx = path.find_last_of(".");
+	if (idx == std::string::npos) {
+		return path + ".ll";
+	}
 	return path.substr(0, idx) + ".ll";
 }
 
@@ -45,7 +49,7 @@ Context::Context(const std::string &path, const Problems &probs)
 	: problems(probs)
 	, m_path(path)
 {
-	module = new llvm::Module("main", llvm::getGlobalContext());
+	module = std::make_unique<llvm::Module>("main", llvm::getGlobalContext());
 }
 
 void Context::generateCode(NBlock *code)
@@ -61,14 +65,14 @@ void Context::generateCode(NBlock *code)
 		llvm::makeArrayRef(argTypes),
 		false
 	);
-	m_main = llvm::Function::Create(
+	auto main = llvm::Function::Create(
 		mainType,
 		llvm::GlobalValue::ExternalLinkage,
-		"main", module
+		"main", module.get()
 	);
 	auto bblock = llvm::BasicBlock::Create(
 		llvm::getGlobalContext(),
-		"entry", m_main, 0
+		"entry", main, 0
 	);
 
 	// Push a new variable/block context.
@@ -86,7 +90,7 @@ void Context::generateCode(NBlock *code)
 bool Context::emit()
 {
 	std::string file = filename(m_path);
-	std::string ec;
+	std::error_code ec;
 
 	llvm::raw_fd_ostream stream(file.c_str(), ec, llvm::sys::fs::F_RW);
 	llvm::PassManager pm;
@@ -99,15 +103,19 @@ bool Context::run()
 {
 	std::string str;
 	std::vector<llvm::GenericValue> noargs;
+	auto main = module->getFunction("main");
 
-	auto ee = llvm::EngineBuilder(module).setErrorStr(&str).create();
+	auto ee = llvm::EngineBuilder(std::move(module))
+		.setErrorStr(&str)
+		.create();
 	if (str != "") {
 		Problem problem(0, 0, str);
 		problem.print(m_path);
 		return false;
 	}
 
-	ee->runFunction(m_main, noargs);
+	ee->finalizeObject();
+	ee->runFunction(main, noargs);
 	return true;
 }
 

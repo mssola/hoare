@@ -23,4 +23,3 @@ target_link_libraries(hoare
 )
 
 install(TARGETS hoare DESTINATION bin)
-

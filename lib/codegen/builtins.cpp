@@ -38,7 +38,7 @@ llvm::Function * Builtins::insertPrintFunction(Context *context)
 	auto func = llvm::Function::Create(
 		printf, llvm::Function::ExternalLinkage,
 		llvm::Twine("printf"),
-		context->module
+		context->module.get()
 	);
 	func->setCallingConv(llvm::CallingConv::C);
 	return func;

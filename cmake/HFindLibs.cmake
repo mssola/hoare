@@ -11,8 +11,8 @@ add_definitions(${LLVM_DEFINITIONS})
 
 llvm_map_components_to_libnames(llvm_libs
   core
-  engine
   irreader
+  mcjit
   native
   support
 )

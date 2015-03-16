@@ -18,7 +18,7 @@
 #include <codegen/hoare.h>
 
 #include <llvm/Support/TargetSelect.h>
-#include <llvm/ExecutionEngine/JIT.h>
+#include <llvm/ExecutionEngine/MCJIT.h>
 
 #include <codegen/context.h>
 #include <parser/driver.h>
@@ -48,6 +48,7 @@ bool hoare::compile(const char *path, bool print)
 		return context.emit();
 	}
 	llvm::InitializeNativeTarget();
+	llvm::InitializeNativeTargetAsmPrinter();
 	return context.run();
 }
 

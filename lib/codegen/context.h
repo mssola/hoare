@@ -22,11 +22,12 @@
 
 #include <llvm/IR/Function.h>
 
-#include <ast/node.h>
 #include <codegen/blocks.h>
 #include <utils/problem.h>
 
 namespace hoare {
+
+class NBlock;
 
 class Context
 {
@@ -40,11 +41,10 @@ public:
 public:
 	Problems problems;
 	Blocks blocks;
-	llvm::Module *module;
+	std::unique_ptr<llvm::Module> module;
 
 private:
 	std::string m_path;
-	llvm::Function *m_main;
 };
 
 }

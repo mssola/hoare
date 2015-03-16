@@ -87,7 +87,7 @@ llvm::Value * NString::generateValue(Context *context)
 		llvm::getGlobalContext(), value.c_str()
 	);
 
-	auto module = context->module;
+	auto module = context->module.get();
 	auto var = new llvm::GlobalVariable(
 		*module,
 		llvm::ArrayType::get(
