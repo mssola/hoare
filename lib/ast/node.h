@@ -32,110 +32,77 @@ namespace hoare {
  */
 
 class Context;
-class NExpression;
-class NStatement;
+struct NExpression;
+struct NStatement;
 
 using NExpressionList = std::vector<NExpression *>;
 using NStatementList = std::vector<NStatement *>;
 
-class Node
-{
-public:
+struct Node {
 	Node();
 	virtual ~Node();
 
 	virtual llvm::Value * generateValue(Context *context);
 };
 
-class NExpression : public Node
-{
+struct NExpression : public Node {
 };
 
-class NStatement : public Node
-{
+struct NStatement : public Node {
 };
 
-class NBlock : public Node
-{
-public:
+struct NBlock : public Node {
 	virtual llvm::Value * generateValue(Context *context) override;
 
-public:
 	std::vector<NStatement*> statements;
 };
 
-class NParallel : public NStatement
-{
-public:
+struct NParallel : public NStatement {
 	std::vector<NStatement *> statements;
 };
 
-class NName : public NExpression
-{
-public:
+struct NName : public NExpression {
 	explicit NName(std::string &name);
-
 	virtual llvm::Value * generateValue(Context *context) override;
 
-public:
 	std::string name;
 	unsigned int line;
 	unsigned int startColumn, endColumn;
 };
 
-class NString : public NExpression
-{
-public:
+struct NString : public NExpression {
 	explicit NString(std::string value);
-
 	virtual llvm::Value * generateValue(Context *context) override;
 
-public:
 	std::string value;
 };
 
-class NNumeric : public NExpression
-{
-public:
+struct NNumeric : public NExpression {
 	explicit NNumeric(unsigned long long value);
-
 	virtual llvm::Value * generateValue(Context *context) override;
 
-public:
 	unsigned long long value;
 };
 
-class NDeclaration : public NStatement
-{
-public:
-	explicit NDeclaration(NName &left, NName &right);
-
+struct NDeclaration : public NStatement {
+	NDeclaration(NName &left, NName &right);
 	virtual llvm::Value * generateValue(Context *context) override;
 
-public:
 	NName left, right;
 };
 
-class NAssign : public NStatement
-{
-public:
+struct NAssign : public NStatement {
 	NAssign(NName &left, NNumeric &right);
-
 	virtual llvm::Value * generateValue(Context *context) override;
 
-public:
 	NName left;
 	NNumeric right;
 };
 
-class NFunctionCall : public NStatement
-{
-public:
+struct NFunctionCall : public NStatement {
 	explicit NFunctionCall(NExpressionList &args);
-
 	virtual llvm::Value * generateValue(Context *context) override;
 
-public:
 	NExpressionList args;
 };
 

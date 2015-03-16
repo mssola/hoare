@@ -36,9 +36,7 @@ using Block = struct BlockType {
 	std::set<std::string> unused;
 };
 
-class Blocks
-{
-public:
+struct Blocks {
 	void push(llvm::BasicBlock *block);
 	void pop();
 

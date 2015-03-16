@@ -27,10 +27,9 @@
 
 namespace hoare {
 
-class NBlock;
+struct NBlock;
 
-class Context
-{
+class Context {
 public:
 	Context(const std::string &path, const Problems &problems);
 

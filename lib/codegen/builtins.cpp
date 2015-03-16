@@ -24,7 +24,9 @@
 
 using namespace hoare;
 
-llvm::Function * Builtins::insertPrintFunction(Context *context)
+namespace {
+
+llvm::Function * insertPrintFunction(Context *context)
 {
 	// The first argument: char *. The rest of arguments are specified later as
 	// a variable length list.
@@ -42,6 +44,8 @@ llvm::Function * Builtins::insertPrintFunction(Context *context)
 	);
 	func->setCallingConv(llvm::CallingConv::C);
 	return func;
+}
+
 }
 
 void Builtins::addInContext(Context *context)

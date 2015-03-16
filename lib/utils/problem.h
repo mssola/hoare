@@ -23,8 +23,7 @@
 
 namespace hoare {
 
-class Problem
-{
+class Problem {
 public:
 	Problem();
 	Problem(unsigned int l, unsigned int c, std::string m);
@@ -42,8 +41,7 @@ public:
 	std::string message;
 };
 
-class Problems
-{
+class Problems {
 public:
 	Problems();
 	explicit Problems(const std::string &path);

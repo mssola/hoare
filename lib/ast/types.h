@@ -26,9 +26,7 @@ namespace llvm {
 
 namespace hoare {
 
-class Types
-{
-public:
+struct Types {
 	static llvm::Type * of(std::string &name);
 };
 

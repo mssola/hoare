@@ -108,8 +108,7 @@ llvm::Value * NString::generateValue(Context *context)
 	return llvm::ConstantExpr::getGetElementPtr(var, indices);
 }
 
-NNumeric::NNumeric(unsigned long long v)
-	: value(v)
+NNumeric::NNumeric(unsigned long long v) : value(v)
 {
 }
 
@@ -123,7 +122,9 @@ llvm::Value * NNumeric::generateValue(Context *context)
 	);
 }
 
-NDeclaration::NDeclaration(NName &l, NName &r) : left(l), right(r)
+NDeclaration::NDeclaration(NName &l, NName &r)
+	: left(l)
+	, right(r)
 {
 }
 
@@ -159,7 +160,9 @@ llvm::Value * NDeclaration::generateValue(Context *context)
 	return alloc;
 }
 
-NAssign::NAssign(NName &l, NNumeric &r) : left(l), right(r)
+NAssign::NAssign(NName &l, NNumeric &r)
+	: left(l)
+	, right(r)
 {
 }
 

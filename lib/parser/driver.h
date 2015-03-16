@@ -26,13 +26,12 @@
 
 namespace hoare {
 
-class NBlock;
+struct NBlock;
 
-class Driver
-{
+class Driver {
 public:
 	Driver();
-	~Driver();
+	virtual ~Driver();
 
 	void parse(const std::string &path);
 	void addProblem(const std::string &message, bool pushback = true);

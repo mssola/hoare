@@ -26,13 +26,8 @@ namespace hoare {
 
 class Context;
 
-class Builtins
-{
-public:
+struct Builtins {
 	void addInContext(Context *context);
-
-private:
-	llvm::Function * insertPrintFunction(Context *context);
 };
 
 }

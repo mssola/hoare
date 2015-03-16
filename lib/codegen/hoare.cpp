@@ -17,8 +17,8 @@
 
 #include <codegen/hoare.h>
 
-#include <llvm/Support/TargetSelect.h>
 #include <llvm/ExecutionEngine/MCJIT.h>
+#include <llvm/Support/TargetSelect.h>
 
 #include <codegen/context.h>
 #include <parser/driver.h>

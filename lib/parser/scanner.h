@@ -28,9 +28,7 @@ namespace hoare {
 
 class Driver;
 
-class Scanner
-{
-public:
+struct Scanner {
 	Scanner();
 	virtual ~Scanner();
 
@@ -44,7 +42,6 @@ public:
 	unsigned int nextc();
 	void pushback();
 
-public:
 	unsigned int line, column, prevc, counter;
 	unsigned int length;
 	char *contents, *actual;

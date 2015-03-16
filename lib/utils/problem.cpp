@@ -16,9 +16,7 @@
  */
 
 #include <utils/problem.h>
-
 #include <fstream>
-
 #include <llvm/Support/raw_ostream.h>
 
 using namespace hoare;
