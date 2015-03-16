@@ -1,0 +1,34 @@
+
+.TH HOARE 1 "${DATE}" "hoare ${HOARE_VERSION_STRING}" "User Commands"
+
+.SH NAME
+hoare \- the hoare compiler
+.SH SYNOPSIS
+hoare [OPTION]... [FILE]...
+.SH DESCRIPTION
+.B hoare
+is a compiler for the language described in Sir Tony Hoare's paper
+"Communicating Sequential Processes". Depending on the options being passed,
+it can behave as either a compiler or an interpreter.
+.SH OPTIONS
+.IP "\fB\-h, \-\-help\fR" 4
+.IX Item "--help"
+Display available options.
+.IP "\fB\-S\fR" 4
+.IX Item "-S"
+Emit the LLVM representation assembler. It emits the representation into a new
+file with the .ll extension. This file can then be compiled with clang in order
+to produce a platform-dependent binary.
+.IP "\fB\-v, \-\-version\fR" 4
+.IX Item "--version"
+Show the current version.
+.SH BUGS
+To report bugs, please visit <https://github.com/mssola/hoare/issues>.
+.SH AUTHOR
+Written by Miquel Sabaté Solà.
+.SH COPYRIGHT
+.nf
+Copyright (C) 2015 Miquel Sabaté Solà <mikisabate@gmail.com>
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+.fi
+

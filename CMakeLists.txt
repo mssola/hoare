@@ -15,6 +15,13 @@ ecm_setup_version(${HOARE_MAJOR}.${HOARE_MINOR}.${HOARE_PATCH}
                   VARIABLE_PREFIX HOARE
                   VERSION_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/version.h" )
 
+# Applying the version string to the man page.
+string(TIMESTAMP DATE "%Y-%m-%d")
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/misc/hoare.1.in
+    ${CMAKE_CURRENT_BINARY_DIR}/hoare.1
+)
+
 include_directories(HOARE_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/lib
@@ -32,3 +39,4 @@ target_link_libraries(hoare
 )
 
 install(TARGETS hoare DESTINATION bin)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/hoare.1 DESTINATION share/man/man1)
