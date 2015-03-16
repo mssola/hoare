@@ -1,3 +1,4 @@
+
 project(hoare)
 cmake_minimum_required(VERSION 2.8.0)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
@@ -6,12 +7,20 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 include(HFindLibs)
 include(HCompiler)
 
-set(HOARE_INCLUDE_DIRS
+# Version
+set(HOARE_MAJOR 0)
+set(HOARE_MINOR 1)
+set(HOARE_PATCH 0)
+ecm_setup_version(${HOARE_MAJOR}.${HOARE_MINOR}.${HOARE_PATCH}
+                  VARIABLE_PREFIX HOARE
+                  VERSION_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/version.h" )
+
+include_directories(HOARE_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/lib
   ${CMAKE_CURRENT_BINARY_DIR}/lib
 )
 
-include_directories(${HOARE_INCLUDE_DIRS})
 add_subdirectory(lib)
 add_executable(hoare main.cpp)
 target_link_libraries(hoare

@@ -1,0 +1,11 @@
+
+#ifndef HOARE_VERSION_H
+#define HOARE_VERSION_H
+
+#define HOARE_VERSION_STRING "0.1.0"
+#define HOARE_VERSION_MAJOR 0
+#define HOARE_VERSION_MINOR 1
+#define HOARE_VERSION_PATCH 0
+#define HOARE_VERSION ((0<<16)|(1<<8)|(0))
+
+#endif

@@ -16,18 +16,16 @@
  */
 
 #include <llvm/Support/raw_ostream.h>
-#include <codegen/hoare.h>
 
-constexpr int major = 0;
-constexpr int minor = 1;
-constexpr int patch = 0;
+#include <codegen/hoare.h>
+#include <version.h>
 
 void version()
 {
-	if (patch == 0) {
-		printf("hoare version %d.%d\n", major, minor);
+	if (HOARE_VERSION_PATCH == 0) {
+		printf("hoare version %d.%d\n", HOARE_VERSION_MAJOR, HOARE_VERSION_MINOR);
 	} else {
-		printf("hoare version %d.%d.%d\n", major, minor, patch);
+		printf("hoare version %s\n", HOARE_VERSION_STRING);
 	}
 	exit(0);
 }
