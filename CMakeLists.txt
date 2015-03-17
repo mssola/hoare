@@ -22,7 +22,7 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/hoare.1
 )
 
-include_directories(HOARE_INCLUDE_DIRS
+include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/lib
   ${CMAKE_CURRENT_BINARY_DIR}/lib

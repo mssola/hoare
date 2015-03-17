@@ -22,16 +22,19 @@
 #include <ast/node.h>
 #include <parser/driver.h>
 
-#ifdef yyerror
-#undef yyerror
-#endif
-#define yyerror(driver,msg) driver->addProblem(msg)
+namespace {
 
+void yyerror(hoare::Driver *driver, const char *msg)
+{
+	driver->addProblem(msg);
+}
 
-static int yylex(YYSTYPE *lval, void *p)
+int yylex(YYSTYPE *lval, void *p)
 {
 	hoare::Driver *driver = static_cast<hoare::Driver *>(p);
 	return driver->scanner->lex(lval, driver);
+}
+
 }
 
 %}
@@ -128,10 +131,12 @@ stmts: stmt ';'
 	| error ';'
 	{
 		yyerrok;
+		YYERROR;
 	}
 	| stmts error ';'
 	{
 		yyerrok;
+		YYERROR;
 	}
 ;
 

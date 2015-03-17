@@ -28,6 +28,5 @@ void Blocks::push(llvm::BasicBlock *block)
 
 void Blocks::pop()
 {
-	auto top = m_blocks.top();
 	m_blocks.pop();
 }

@@ -20,7 +20,9 @@
 #include <codegen/hoare.h>
 #include <version.h>
 
-void version()
+namespace {
+
+[[noreturn]] void version()
 {
 	if (HOARE_VERSION_PATCH == 0) {
 		printf("hoare version %d.%d\n", HOARE_VERSION_MAJOR, HOARE_VERSION_MINOR);
@@ -30,7 +32,7 @@ void version()
 	exit(0);
 }
 
-void usage()
+[[noreturn]] void usage()
 {
 	llvm::outs() << "usage: hoare [options] <files>\n";
 	llvm::outs() << "Options:\n";
@@ -55,6 +57,8 @@ bool fileReadable(const char *path)
 	std::string msg("hoare: error: " + std::string(path));
 	perror(msg.c_str());
 	return false;
+}
+
 }
 
 int main(int argc, char *argv[])

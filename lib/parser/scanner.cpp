@@ -54,10 +54,10 @@ unsigned int readEscape(Driver *driver, unsigned char nextChar)
 		return '\'';
 	case '"':
 		return '"';
+	default:
+		driver->addProblem("unknown escape character");
+		return 0;
 	}
-
-	driver->addProblem("unknown escape character");
-	return 0;
 }
 
 /*
